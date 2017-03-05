@@ -1,0 +1,25 @@
+<md-card>
+  <form (ngSubmit)="save()" [formGroup]="form">
+    <md-card-title>{{type}} Release</md-card-title>
+    <md-card-content>
+      <p>
+        <md-input-container>
+          <input mdInput class="large" required placeholder="Name" formControlName="name">
+        </md-input-container>
+      </p>
+      <p>
+        Stories
+        <select formControlName="stories" multiple>
+          <option [value]="story._id" *ngFor="let story of stories">{{story.name}}</option>
+        </select>
+      </p>
+      <p>
+        <md-input-container>
+          <input mdInput class="large" placeholder="Shared With (enter email or username of a registered person, then validate with enter)" formControlName="sharedWith">
+        </md-input-container>
+      </p>
+      <button type="submit" md-raised-button color="primary" [disabled]="!form.valid">Save</button>
+      <a md-raised-button [routerLink]="['/project-management', 'releases']">Back</a>
+    </md-card-content>
+  </form>
+</md-card>

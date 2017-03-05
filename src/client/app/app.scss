@@ -1,0 +1,41 @@
+md-toolbar {
+  padding: 0;
+
+  div.title {
+    width: 180px;
+    text-align: center;
+
+    a {
+      color: rgba(255, 255, 255, 0.87);
+      text-decoration: none;
+    }
+    a:hover {
+      color: white;
+    }
+  }
+}
+
+header {
+  display: flex;
+}
+
+.active {
+  background-color: rgba(209, 196, 233, 0.3)
+}
+
+/deep/ nav {
+  width: calc(100% - 180px);
+
+  div {
+    height: 100%;
+
+    a.mat-tab-link {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+
+

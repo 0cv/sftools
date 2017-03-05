@@ -1,0 +1,31 @@
+<header>
+  <md-toolbar color="primary">
+    <div class="title">
+      <div style="width:100%">
+        Salesforce Tools
+      </div>
+      <a href="https://www.github.com/Krisa/sftools" target="_blank">
+        <md-icon fontSet="fa" fontIcon="fa-github"></md-icon>
+      </a>
+      <a href="https://www.twitter.com/sf_cv" target="_blank">
+        <md-icon fontSet="fa" fontIcon="fa-twitter"></md-icon>
+      </a>
+    </div>
+  </md-toolbar>
+  <nav md-tab-nav-bar *ngIf="isLoggedIn">
+    <a md-tab-link
+        *ngFor="let tabLink of tabLinks; let i = index"
+        [routerLink]="tabLink.link"
+        [active]="activeLinkIndex === i"
+        [class.active]="activeLinkIndex === i"
+        (click)="activeLinkIndex = i">
+      {{tabLink.label}}
+    </a>
+    <a md-tab-link (click)="logout()">Log Out</a>
+  </nav>
+</header>
+
+<main>
+  <router-outlet></router-outlet>
+</main>
+<loading-spinner [isShown]="isSpinnerShown"></loading-spinner>

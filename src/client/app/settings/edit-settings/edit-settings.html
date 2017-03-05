@@ -1,0 +1,24 @@
+<md-card>
+  <form (ngSubmit)="save()" [formGroup]="form">
+    <md-card-content>
+      <md-input-container>
+        <input mdInput class="large" placeholder="Username" formControlName="username" required>
+      </md-input-container>
+      <br/>
+      <md-input-container>
+        <input mdInput class="large" placeholder="Email" type="email" formControlName="email" required>
+      </md-input-container>
+      <br/>
+      <md-input-container>
+        <input mdInput class="large" placeholder="Password" type="password" formControlName="password" required>
+      </md-input-container>
+      <br/>
+      <md-input-container>
+        <input mdInput class="large" placeholder="Password Verification" type="password" [(ngModel)]="password_verif" [ngModelOptions]="{standalone: true}" required >
+      </md-input-container>
+      <br/>
+      <button type="submit" [disabled]="!form.valid || form.value.password != password_verif" md-raised-button color="primary" >Save</button>
+      <a md-raised-button [routerLink]="['/settings']">Back</a>
+    </md-card-content>
+  </form>
+</md-card>

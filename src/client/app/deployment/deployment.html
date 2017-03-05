@@ -1,0 +1,110 @@
+<div>
+  <md-progress-bar mode="buffer" color="primary" *ngIf="isLoading"></md-progress-bar>
+</div>
+<md-card>
+  <md-card-content class="content">
+    <div>
+      <div *ngIf="releaseId === null && request.selectedSource === null">
+        <md-select placeholder="Stories" [(ngModel)]="storyId" (ngModelChange)="onStoryChange()" #storyIdModel="ngModel">
+          <md-option (click)="storyIdModel.reset()">Select a Story...</md-option>
+          <md-option *ngFor="let story of stories" [value]="story._id">
+            {{story.name}}
+          </md-option>
+        </md-select>
+        <br/>
+        <br/>
+        <br/>
+      </div>
+      <div *ngIf="storyId === null && request.selectedSource === null">
+        <md-select placeholder="Releases" [(ngModel)]="releaseId" (ngModelChange)="onReleaseChange()" #releaseIdModel="ngModel">
+          <md-option (click)="releaseIdModel.reset()">Select a Release...</md-option>
+          <md-option *ngFor="let release of releases" [value]="release._id">
+            {{release.name}}
+          </md-option>
+        </md-select>
+        <br/>
+        <br/>
+        <br/>
+      </div>
+      <div *ngIf="storyId === null && releaseId === null">
+        <md-select placeholder="Source" [(ngModel)]="request.selectedSource" (ngModelChange)="onConnectionChange()" #selectedSourceModel="ngModel">
+          <md-option (click)="selectedSourceModel.reset()">Select a Source...</md-option>
+          <md-option *ngFor="let connection of connections" [value]="connection._id">
+            {{connection.folder}}
+          </md-option>
+        </md-select>
+        <br/>
+        <br/>
+        <br/>
+      </div>
+      <div *ngIf="!request.deleteMetadata">
+        <md-select placeholder="Target" [(ngModel)]="request.selectedTarget" #selectedTargetModel="ngModel">
+          <md-option (click)="selectedTargetModel.reset()">Select a Target...</md-option>
+          <md-option *ngFor="let connection of connections" [value]="connection._id">
+            {{connection.folder}}
+          </md-option>
+        </md-select>
+        <br/>
+        <br/>
+        <br/>
+      </div>
+      <div *ngIf="storyId === null && releaseId === null">
+        <md-checkbox [(ngModel)]="request.deleteMetadata">
+          Delete Metadata?
+        </md-checkbox>
+        <br/>
+        <md-checkbox [(ngModel)]="request.showManagedPackage" (ngModelChange)="onConnectionChange()">
+          Show Managed Package?
+        </md-checkbox>
+        <br/>
+        <br/>
+      </div>
+
+      <fancytree #fancytree
+        [lazyLoadSource]="request.selectedSource"
+        [showManagedPackage]="request.showManagedPackage"
+        [extensions]="['childcounter', 'glyph', 'table']"
+        *ngIf="request.selectedSource !== null || storyId !== null || releaseId !== null"
+      ></fancytree>
+    </div>
+    <div>
+      <md-select placeholder="Test Level" [(ngModel)]="request.testLevel">
+        <md-option *ngFor="let opt of optTestLevel" [value]="opt">
+          {{opt | UncamelCase}}
+        </md-option>
+      </md-select>
+      <br/>
+      <md-checkbox [(ngModel)]="request.checkOnly">
+        Check Only
+      </md-checkbox>
+      <br/>
+      <md-checkbox [(ngModel)]="request.rollbackOnError">
+        Rollback On Error
+      </md-checkbox>
+      <br/>
+
+      <button
+        md-raised-button
+        [disabled]="
+          isLoading ||
+          (request.selectedSource === null && storyId === null && releaseId === null) ||
+          (request.selectedTarget === null && !request.deleteMetadata)"
+        (click)="deploy()"
+        color="primary">
+        Deploy
+      </button>
+      <button md-raised-button [disabled]="!isLoading || !deploymentId || canceling" (click)="cancelDeployment()" color="warn">Cancel Deployment</button>
+      <button md-raised-button *ngIf="storyId === null && releaseId === null" [disabled]="isLoading || request.selectedSource === null" (click)="getPackage()">Download Package.xml</button>
+      <button md-raised-button *ngIf="storyId === null && releaseId === null" [disabled]="isLoading || request.selectedSource === null" (click)="getZip()">Download ZIP</button>
+
+      <div class="textareas">
+        <div class="horizontal-alignment">
+          <textarea disabled="true" [ngModel]="status"></textarea>
+          <textarea disabled="true" [ngModel]="deploymentResult"></textarea>
+        </div>
+        <textarea disabled="true" [ngModel]="componentFailures"></textarea>
+        <textarea disabled="true" [ngModel]="testFailures"></textarea>
+      </div>
+    </div>
+  </md-card-content>
+</md-card>

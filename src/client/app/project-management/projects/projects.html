@@ -1,0 +1,46 @@
+<md-card>
+  <md-card-content>
+    <table>
+      <thead>
+        <tr>
+          <th>
+            Name
+          </th>
+          <th>
+            Connection
+          </th>
+          <th>
+            Shared With
+          </th>
+          <th>
+            Edit
+          </th>
+          <th>
+            Delete
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let project of projects">
+          <td>
+            <a [routerLink]="['/project-management', 'project', 'detail', project._id]">
+              {{project.name}}
+            </a>
+          </td>
+          <td>{{connections[project.connection]?.folder}}</td>
+          <td>{{project.sharedWith}}</td>
+          <td>
+            <a [routerLink]="['/project-management', 'project', project._id]">
+              <i style="color: blue" class="material-icons">mode_edit</i>
+            </a>
+          </td>
+          <td>
+            <i style="color: red" (click)="delete(project)" class="material-icons">delete</i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br/>
+    <button md-raised-button color="primary" [routerLink]="['/project-management', 'project', 'new']">Add Project</button>
+  </md-card-content>
+</md-card>

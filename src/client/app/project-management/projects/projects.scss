@@ -1,0 +1,17 @@
+table {
+  width: 100%;
+  text-align: left;
+
+  i {
+    cursor: pointer;
+  }
+}
+
+md-card {
+  box-shadow: 0 0 0 0;
+  &:hover {
+    box-shadow: 0 0 0 0;
+  }
+}
+
+

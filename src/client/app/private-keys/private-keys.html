@@ -1,0 +1,38 @@
+<md-card>
+  <md-card-content>
+    <table>
+      <thead>
+        <tr>
+          <th>
+            Name
+          </th>
+          <th>
+            Private Key
+          </th>
+          <th>
+            Edit
+          </th>
+          <th>
+            Delete
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let key of privateKeys">
+          <td class="name">{{key.name}}</td>
+          <td class="key">{{key.value | substr: 500}}</td>
+          <td>
+            <a [routerLink]="['/private-key', key._id]">
+              <i style="color: blue" class="material-icons">mode_edit</i>
+            </a>
+          </td>
+          <td>
+            <i style="color: red" (click)="delete(key)" class="material-icons">delete</i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br/>
+    <button md-raised-button color="primary" [routerLink]="['/private-key', 'new']">Add Private Key</button>
+  </md-card-content>
+</md-card>

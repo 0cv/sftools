@@ -1,0 +1,50 @@
+<md-card>
+  <md-card-content>
+    <table>
+      <thead>
+        <tr>
+          <th>
+            Name
+          </th>
+          <th>
+            Stories
+          </th>
+          <th>
+            Shared With
+          </th>
+          <th>
+            Edit
+          </th>
+          <th>
+            Delete
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let release of releases">
+          <td>
+            <a [routerLink]="['/project-management', 'release', 'detail', release._id]">
+              {{release.name}}
+            </a>
+          </td>
+          <td>
+            <span *ngFor="let story of release.stories; let isLast = last">
+              <a [routerLink]="['/project-management', 'story', 'detail', story]">{{stories[story]?.name}}</a>{{isLast?'':', '}}
+            </span>
+          </td>
+          <td>{{release.sharedwith}}</td>
+          <td>
+            <a [routerLink]="['/project-management', 'release', release._id]">
+              <i style="color: blue" class="material-icons">mode_edit</i>
+            </a>
+          </td>
+          <td>
+            <i style="color: red" (click)="delete(release)" class="material-icons">delete</i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br/>
+    <button md-raised-button color="primary" [routerLink]="['/project-management', 'release', 'new']">Add Release</button>
+  </md-card-content>
+</md-card>

@@ -1,0 +1,44 @@
+{
+  "javascript.validate.enable": false,
+  "eslint.options": {
+    "parser": "babel-eslint",
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module"
+    },
+    "extends": [
+      "defaults"
+    ],
+    "plugins": [
+      "babel"
+    ],
+    "env": {
+      "browser": true,
+      "es6": true,
+      "amd": true,
+      "jasmine": true,
+      "node": true,
+      "mocha": true
+    },
+    "rules": {
+      "strict": 0,
+      "eqeqeq": 1,
+      "curly": 2,
+      "linebreak-style": [2, "unix"],
+      "quotes": [2, "single"],
+      "indent": [2, 2, {
+        "SwitchCase": 1
+      }],
+      "babel/generator-star-spacing": 1,
+      "babel/new-cap": 1,
+      "babel/array-bracket-spacing": 1,
+      "babel/object-curly-spacing": 0,
+      "babel/object-shorthand": 1,
+      "babel/arrow-parens": 1,
+      "babel/no-await-in-loop": 1,
+      "babel/flow-object-type": 1
+    }
+  },
+  "typescript.tsdk": "./node_modules/typescript/lib",
+  "tslint.rulesDirectory": "./node_modules/codelyzer"
+}

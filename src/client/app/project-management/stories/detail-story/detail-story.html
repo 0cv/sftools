@@ -1,0 +1,29 @@
+<div>
+  <md-progress-bar mode="buffer" color="primary" [bufferValue]="initialLoadBufferValue" *ngIf="initialLoadBufferValue < 99"></md-progress-bar>
+  <md-progress-bar mode="buffer" color="primary" [bufferValue]="bufferValue" *ngIf="isLoading"></md-progress-bar>
+</div>
+<md-card>
+  <md-card-content class="content">
+    <div class="tree">
+
+      <h1>{{story?.name}}</h1>
+
+      <fancytree #fancytree
+        [extensions]="['childcounter', 'glyph', 'table']"
+        (renderTreeColumn)="renderTreeColumn($event)"
+      ></fancytree>
+    </div>
+    <div class="control">
+      <md-card *ngIf="syncingStatus">
+        <span [innerHTML]="syncingStatus"></span>
+      </md-card>
+      <md-checkbox [(ngModel)]="showOutdated" (ngModelChange)="toggleShowOutdated()" [disabled]="isLoading">
+        Show outdated metadata
+      </md-checkbox>
+
+      <a md-raised-button color="primary" (click)="updateMetadata()" [disabled]="isLoading || initialLoadBufferValue < 100">Update selected metadata</a>
+      <a md-raised-button color="warn" (click)="deleteMetadata()" [disabled]="isLoading || initialLoadBufferValue < 100">Delete selected metadata</a>
+      <a md-raised-button (click)="downloadMetadata()" [disabled]="isLoading || initialLoadBufferValue < 100">Download metadata</a>
+    </div>
+  </md-card-content>
+</md-card>

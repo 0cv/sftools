@@ -1,0 +1,27 @@
+.large {
+  width: 90%
+}
+
+md-card {
+  md-card-content {
+    width: 100%;
+    display: flex;
+    &>div {
+      width: 100%;
+    }
+  }
+}
+
+md-radio-button {
+  display: flex;
+  padding-left: 20px;
+}
+
+.mat-input-container {
+  width: calc(100% - 30px);
+}
+
+.mat-select {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}

@@ -1,0 +1,172 @@
+@import './assets/scss/material-icons.scss';
+@import './app/shared/loading-spinner/loading-spinner.scss';
+@import '~@angular/material/core/theming/prebuilt/deeppurple-amber.scss';
+@import './assets/fa/scss/font-awesome.scss';
+
+.material-icons {
+  font-size: 30px;
+}
+
+
+// Fancytree css from node_modules/jquery.fancytree/dist/skin-awesome/ui.fancytree.min.css...
+// copy pasted, cause no scss ...
+
+fancytree {
+  tr.fancytree-ico-c {
+    vertical-align: top;
+  }
+
+  table.fancytree-ext-table {
+    border-collapse: collapse;
+  }
+
+  .metadataDeleted span.fancytree-title {
+    color: red;
+  }
+
+  .metadataDeleted span.fancytree-icon:before {
+    content: "\F1F8";
+    color: red;
+  }
+
+  span.fancytree-expander {
+    cursor: pointer;
+  }
+
+  #fancytree-drop-marker, span.fancytree-checkbox, span.fancytree-drag-helper-img, span.fancytree-empty, span.fancytree-expander, span.fancytree-icon, span.fancytree-radio, span.fancytree-vline {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    vertical-align: top;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+  }
+
+  span.fancytree-node {
+    display: inherit;
+    width: 100%;
+    margin-top: 1px;
+    min-height: 1em;
+  }
+
+  table.fancytree-ext-table span.fancytree-node {
+    display: inline-block;
+    box-sizing: border-box;
+  }
+
+  .fancytree-exp-n span.fancytree-expander, .fancytree-exp-nl span.fancytree-expander {
+    background-image: none;
+    cursor: default;
+  }
+
+  span.fancytree-title {
+    color: #000;
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: top;
+    min-height: 1em;
+    padding: 0 3px;
+    margin: 0 0 0 .5em;
+    border: 1px solid transparent;
+    border-radius: 0;
+  }
+
+  .fancytree-ext-childcounter span.fancytree-icon, .fancytree-ext-filter span.fancytree-icon {
+    position: relative;
+  }
+
+  span.fancytree-icon {
+    margin-left: 0.5em;
+  }
+
+  .fancytree-container {
+    outline: 0;
+    border: 0!important;
+    font-size: 10pt;
+    ul {
+      padding: 0 0 0 16px;
+    }
+  }
+
+  .fancytree-ext-childcounter span.fancytree-childcounter, .fancytree-ext-filter span.fancytree-childcounter {
+    color: black;
+    background-color: white;
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    min-width: 10px;
+    height: 10px;
+    line-height: 1;
+    vertical-align: baseline;
+    border-radius: 10px;
+    padding: 2px;
+    text-align: center;
+    font-size: 9px;
+    font-family: Arial;
+  }
+
+  div.select-container ul {
+    padding: 0;
+    margin: 0;
+    display: flex;
+
+    li {
+      border-radius: 3px;
+      color: #333;
+      border: 1px solid #b4b4b4;
+      position: relative;
+      list-style: none;
+      padding-left: 2px;
+      margin-right: 2px;
+
+      &.green {
+        background-image: linear-gradient(to top, #91e842 0%, #ceff52 70%);
+        border-color: #91e842;
+      }
+
+      &.orange {
+        background-image: linear-gradient(to top, #ff920a 0%, #ffcf4b 70%);
+        border-color: #ff920a;
+      }
+
+      &.undetermined {
+        background-image:
+              linear-gradient(
+              -45deg,
+              rgba(255, 154, 26, 1) 25%,
+              transparent 25%,
+              transparent 50%,
+              rgba(255, 154, 26, 1) 50%,
+              rgba(255, 154, 26, 1) 75%,
+              transparent 75%,
+              transparent
+          );
+        background-size:16px 16px;
+        animation:progress 0.9s linear infinite;
+      }
+
+      i {
+        cursor: pointer;
+        padding: 1px;
+        opacity: 0.7;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  [data-type='show-diff'] {
+    cursor: pointer;
+  }
+
+  @keyframes progress {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: -16px 0px;
+    }
+  }
+}

@@ -1,0 +1,21 @@
+table {
+  width: 100%;
+  text-align: left;
+
+  tr>td:nth-last-child(2), tr>th:nth-last-child(2),
+  tr>td:last-child, tr>th:last-child {
+    text-align: center;
+  }
+
+  i {
+    cursor: pointer;
+  }
+}
+
+md-card {
+  box-shadow: 0 0 0 0;
+  &:hover {
+    box-shadow: 0 0 0 0;
+  }
+}
+

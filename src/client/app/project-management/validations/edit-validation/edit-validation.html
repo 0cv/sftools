@@ -1,0 +1,49 @@
+<md-card>
+  <form (ngSubmit)="save()" [formGroup]="form">
+    <md-card-title>{{type}} Validation</md-card-title>
+    <md-card-content>
+      <md-input-container>
+        <input mdInput class="large" required placeholder="Name" formControlName="name">
+      </md-input-container>
+
+      <md-select placeholder="Choose a Story" required formControlName="story" *ngIf="form.controls.release.value === null">
+        <md-option (click)="form.controls.story.reset(); form.controls.release.enable()">Select a Story...</md-option>
+        <md-option (click)="form.controls.release.disable()" *ngFor="let story of stories" [value]="story._id">
+          {{story.name}}
+        </md-option>
+      </md-select>
+
+      <md-select placeholder="Choose a Release" required formControlName="release" *ngIf="form.controls.story.value === null">
+        <md-option (click)="form.controls.release.reset(); form.controls.story.enable()">Select a Release...</md-option>
+        <md-option (click)="form.controls.story.disable()" *ngFor="let release of releases" [value]="release._id">
+          {{release.name}}
+        </md-option>
+      </md-select>
+
+      <md-select placeholder="Choose a Target" required formControlName="target">
+        <md-option *ngFor="let connection of connections" [value]="connection._id">
+          {{connection.folder}}
+        </md-option>
+      </md-select>
+
+      <md-select placeholder="Frequency" required formControlName="frequency">
+        <md-option *ngFor="let frequency of frequencies" [value]="frequency">
+          {{frequency}}
+        </md-option>
+      </md-select>
+
+      <md-select placeholder="Test Level" required formControlName="testLevel">
+        <md-option *ngFor="let testLevel of testLevels" [value]="testLevel">
+          {{testLevel | UncamelCase}}
+        </md-option>
+      </md-select>
+
+      <md-input-container>
+        <input mdInput class="large" placeholder="Emails, notified on error (comma separated)" formControlName="emails">
+      </md-input-container>
+
+      <button type="submit" md-raised-button color="primary" [disabled]="!form.valid">Save</button>
+      <a md-raised-button [routerLink]="['/project-management', 'validations']">Back</a>
+    </md-card-content>
+  </form>
+</md-card>

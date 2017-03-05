@@ -1,0 +1,77 @@
+<md-card>
+  <md-card-content>
+    <table>
+      <thead>
+        <tr>
+          <th>
+            SF Org Id/Name
+          </th>
+          <th>
+            Rep (Git)
+          </th>
+          <th>
+            Company Folder
+          </th>
+          <th>
+            Auto Run Tests
+          </th>
+          <th>
+            Branch
+          </th>
+          <th>
+            Description
+          </th>
+          <th>
+            Commit Message
+          </th>
+          <th>
+            Last Update
+          </th>
+          <th>
+            Status
+          </th>
+          <th>
+            Components
+          </th>
+          <th>
+            Edit
+          </th>
+          <th>
+            Delete
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let connection of connections">
+          <td>
+            <a *ngIf="connection.accesstoken" target="_blank" href="{{connection.instanceurl}}/secur/frontdoor.jsp?sid={{connection.accesstoken}}&retURL=/home/home.jsp">
+              {{connection.sforgid}}<br/>{{connection.orgname}}
+            </a>
+            <span *ngIf="!connection.accesstoken">
+              {{connection.sforgid}}<br/>{{connection.orgname}}
+            </span>
+          </td>
+          <td>{{connection.folder}}</td>
+          <td>{{connection.companyfolder}}</td>
+          <td>{{connection.isrunningunittests}}</td>
+          <td>{{connection.branch}}</td>
+          <td>{{connection.description}}</td>
+          <td>{{connection.commitmessage}}</td>
+          <td>{{connection.lastupdate | date:'dd/MM/yyyy'}}</td>
+          <td>{{connection.backupStatus}}</td>
+          <td style="word-break: break-word;">{{connection.componenttypes | substr: 500}}</td>
+          <td>
+            <a [routerLink]="['/connection', connection._id]">
+              <i style="color: blue" class="material-icons">mode_edit</i>
+            </a>
+          </td>
+          <td>
+            <i style="color: red" (click)="delete(connection)" class="material-icons">delete</i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br/>
+    <button md-raised-button color="primary" [routerLink]="['/connection', 'new']">Add Connection</button>
+  </md-card-content>
+</md-card>

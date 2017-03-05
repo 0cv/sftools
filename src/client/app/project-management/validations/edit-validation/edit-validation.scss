@@ -1,0 +1,20 @@
+.large {
+  width: 30%;
+}
+
+md-card {
+  box-shadow: 0 0 0 0;
+  &:hover {
+    box-shadow: 0 0 0 0;
+  }
+}
+
+.mat-input-container, .mat-select {
+  width: 100%;
+}
+
+.mat-select {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+

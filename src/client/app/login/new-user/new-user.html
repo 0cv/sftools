@@ -1,0 +1,31 @@
+<md-card>
+  <form (ngSubmit)="onSubmit()" [formGroup]="form">
+    <md-card-title>Create a new user</md-card-title>
+    <md-card-content>
+      <div layout layout-sm="column">
+        <md-input-container>
+          <input mdInput required class="large" autocomplete="new-password" placeholder="Username" autofocus formControlName="username">
+        </md-input-container>
+      </div>
+      <div layout layout-sm="column">
+        <md-input-container>
+          <input mdInput required class="large" autocomplete="new-password" type="email" placeholder="Email" formControlName="email">
+        </md-input-container>
+      </div>
+      <div layout layout-sm="column">
+        <md-input-container>
+          <input mdInput required class="large" autocomplete="new-password" type="password" placeholder="Password" formControlName="password">
+        </md-input-container>
+      </div>
+      <div layout layout-sm="column">
+        <md-input-container>
+          <input mdInput required class="large" autocomplete="new-password" type="password" placeholder="Password Confirmation" formControlName="password_verif" >
+        </md-input-container>
+      </div>
+    </md-card-content>
+    <md-card-actions>
+      <button md-raised-button color="primary" [disabled]="!form.valid || form.value.password_verif != form.value.password">Create User</button>
+      <a md-raised-button [routerLink]="['/login']">Back</a>
+    </md-card-actions>
+  </form>
+</md-card>

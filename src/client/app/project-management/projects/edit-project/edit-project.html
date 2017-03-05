@@ -1,0 +1,26 @@
+<md-card>
+  <form (ngSubmit)="save()" [formGroup]="form">
+    <md-card-title>{{type}} Project</md-card-title>
+    <md-card-content>
+      <p>
+        <md-input-container>
+          <input mdInput class="large" required placeholder="Name" formControlName="name">
+        </md-input-container>
+      </p>
+      <p>
+        <md-select placeholder="Connection" required formControlName="connection">
+          <md-option *ngFor="let connection of connections" [value]="connection._id">
+            {{connection.folder}}
+          </md-option>
+        </md-select>
+      </p>
+      <p>
+        <md-input-container>
+          <input mdInput class="large" placeholder="Shared With (enter email or username of a registered person, then validate with enter)" formControlName="sharedWith">
+        </md-input-container>
+      </p>
+      <button type="submit" md-raised-button color="primary" [disabled]="!form.valid">Save</button>
+      <a md-raised-button [routerLink]="['/project-management', 'projects']">Back</a>
+    </md-card-content>
+  </form>
+</md-card>
