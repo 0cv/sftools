@@ -8,7 +8,9 @@ This application allows you to:
 
 - backup your metadata in real time (approx. 10 min schedule) into a Git repository of your choice (GitHub and Bitbucket are supported but it's easily extendable to any Git Server, including your own/company one).
 
-- manage your project in a similar way to [Stratosource](https://github.com/StratoSource/StratoSource/wiki/Screenshots). This application is inspired by Strato around the detection of changed/new/deleted Metadata but is more advanced in many respects to it. It's especially very performant and is relatively smart when it comes to the analysis and parsing of complex metadata (objects, profiles, permission sets ...).
+- validate the unit tests of your Org and get a report mailed to you or posted in a Slack Channel.
+
+- manage your project in a similar way to [Stratosource](https://github.com/StratoSource/StratoSource/wiki/Screenshots). This application is inspired by Strato around the detection of changed/new/deleted Metadata but is more advanced in many respects to it. It's especially very performant and is relatively smart when it comes to the analysis and parsing of complex metadata (objects, profiles, permission sets ...). In short, the application fetches metadata from Git, parses them, split the complex ones into many chunks and save them in a Mongo DB. From there, you can assign each of them to a Story and build a deployment package (based on 1 or multiple Stories). Also you will be able to track changes over time and update (or not) each package.
 
 ## How does it work?
 
@@ -20,7 +22,7 @@ The application is based on Koa2, Angular, Mongo, Redis... The application is ea
 
 ## Can I test it?
 
-Yes, it's available under https://sftools.herokuapp.com and under https://sftoolssandbox.herokuapp.com. Please note, that while you should be able to deploy easily across environment, the backup of metadata on Git is more resource consuming and especially, the project management part is generating very large volume of data which is not going to work on a free mongo tier... Please be mindful! Also note that while the app does not store any credentials, it will store your access and especially your [refresh token](https://help.salesforce.com/apex/HTViewHelpDoc?id=remoteaccess_oauth_refresh_token_flow.htm&language=en). Therefore, you shouldn't use any of these free app with any Production credentials. Instead, you should clone the repository and install the app on your own instance.
+Yes, it's available under https://sftools.herokuapp.com. Please note, that while you should be able to deploy easily across environment, the backup of metadata on Git is more resource consuming and especially, the project management part is generating very large volume of data which is not going to work on a free mongo tier... Please be mindful! Also note that while the app does not store any credentials, it will store your access and especially your [refresh token](https://help.salesforce.com/apex/HTViewHelpDoc?id=remoteaccess_oauth_refresh_token_flow.htm&language=en). Therefore, you shouldn't use any of these free app with any Production credentials. Instead, you should clone the repository and install the app on your own instance.
 
 ## How much does it cost?
 
@@ -87,7 +89,7 @@ You should see (within 10 minutes) the repository created in your Git Account. I
 
 Note that a click on the link of a created connection will log you automatically in the corresponding org even if you were not logged in before.
 
-### Most relevant reasons why it may fail
+### Main reasons why it may fail
 
 * You gave a wrong git username / password (or you didn’t respect the case of your password and/or username).
 
@@ -216,7 +218,7 @@ Before trying to deploy on your own server, you will want to experiment on your 
   - clientId / clientSecret: coming from the connected App in Salesforce (ensure the redirect_uri is setup correctly too in the connected App)
   - sendgrid_apikey: you need to sign up for an account (free)
 
-After you are done with the 3 steps above, you can run 3 processes in 3 different terminals:
+After you are done with the steps above, you need to run 3 processes in 3 different terminals:
 - `yarn watch:client:hmr` runs anytime a change happens on the front end code
 - `yarn watch:server` runs anytime a change happens on the back end code
 - `yarn start` runs the node server (for backend code)
