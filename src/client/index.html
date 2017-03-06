@@ -15,9 +15,11 @@
   <!-- base url -->
   <base href="/">
 
-  <style type="text/css">
-
-  </style>
+  <script>
+    if (document.location.protocol === 'http:' && document.location.hostname !== 'localhost') {
+      document.location.href = document.location.href.replace('http://', 'https://');
+    }
+  </script>
 
   <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
