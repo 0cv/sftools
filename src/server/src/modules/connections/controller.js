@@ -127,10 +127,12 @@ export async function getMetadata(ctx) {
     }
 
     //CURRENT BUG IN SALESFORCE: RULES ARE DUPLICATED, WE DEDUPE THEM...
-    //Filtering is simply based on Id of the Sharing Rules.
-    list = list.filter((tmp, index, array) => {
-      return index === array.findIndex(item => tmp.id === item.id)
-    })
+    if(type === 'SharingRules') {
+      //Filtering is simply based on Id of the Sharing Rules.
+      list = list.filter((tmp, index, array) => {
+        return index === array.findIndex(item => tmp.id === item.id)
+      })
+    }
 
     if (!Array.isArray(list)) {
       list = [list]
