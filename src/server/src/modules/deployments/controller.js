@@ -1,8 +1,15 @@
 import { Connection, Story, Storymetadata } from '../../models'
 import { config } from '../../../config'
+import jszip from 'jszip'
 import { getHeaderMetadata, getUserId, jsforce, metadata, streamClose, streamData, streamError } from '../../utils'
 const metadataZip = require('../../../metadata-zip').metadataZip //bit hacky to reference the path ..
 import mongoose from 'mongoose'
+
+const packageHeader = '<?xml version="1.0" encoding="UTF-8"?>\n' +
+  '<Package xmlns="http://soap.sforce.com/2006/04/metadata">'
+
+const packageFooter = '\t<version>' + config.apiVersion + '</version>\n' +
+'</Package>'
 
 export async function cancel(ctx, data) {
   console.log('going to cancel', data.targetId, data.deploymentId)
@@ -19,21 +26,32 @@ export async function cancel(ctx, data) {
 
 export async function deploy(ctx, data) {
   try {
-    let zip
+    let zipBase64
 
-    if(data.storyIds && data.storyIds.length) {
-      zip = await getMetadataFromStories(ctx, data)
+    if(!data.deleteMetadata) {
+      if(data.storyIds && data.storyIds.length) {
+        zipBase64 = await getMetadataFromStories(ctx, data)
+      } else {
+        let res = await getMetadataFromSalesforce(ctx, data)
+        zipBase64 = res.zipFile
+      }
+
+      ctx.socket.emit('deployment', {
+        message: {
+          state: 'Package retrieved'
+        }
+      })
     } else {
-      zip = await getMetadataFromSalesforce(ctx, data)
-      zip = zip.zipFile
+      let zip = new jszip()
+      zip.file('destructiveChanges.xml', buildPackage(data.metadata))
+      zip.file('package.xml', packageHeader + packageFooter)
+
+      zipBase64 = await zip.generateAsync({
+        type: 'base64'
+      })
     }
 
-    ctx.socket.emit('deployment', {
-      message: {
-        state: 'Package retrieved'
-      }
-    })
-    const deploymentResult = await deployMetadataToSalesforce(zip, ctx, data)
+    const deploymentResult = await deployMetadataToSalesforce(zipBase64, ctx, data)
     console.log('result of deployment: ', deploymentResult)
     ctx.socket.emit('deployment', {
       deploymentResult
@@ -44,7 +62,7 @@ export async function deploy(ctx, data) {
 }
 
 export async function deployMetadataToSalesforce(zip, ctx, data) {
-  const connection = await Connection.findById(data.targetId)
+  const connection = await Connection.findById( data.deleteMetadata? data.sourceId : data.targetId )
   const sfConn = jsforce(connection)
   sfConn.metadata.pollTimeout = 60 * 1000 * 1000 // 1 hour
   sfConn.metadata.pollInterval = 15 * 1000 // 15 seconds
@@ -52,7 +70,7 @@ export async function deployMetadataToSalesforce(zip, ctx, data) {
     checkOnly: data.checkOnly,
     rollbackOnError: connection.issandbox?data.rollbackOnError:true,
     testLevel: data.testLevel,
-    singlePackage: false
+    singlePackage: data.deleteMetadata? true : false
   })
 
   if(ctx) {
@@ -245,13 +263,12 @@ export async function getStoryReleaseMetadata(ctx, data) {
 }
 
 export function getPackage(ctx) {
-  const packageHeader = '<?xml version="1.0" encoding="UTF-8"?>\n' +
-  '<Package xmlns="http://soap.sforce.com/2006/04/metadata">'
-
-  const packageFooter = '\t<version>' + config.apiVersion + '</version>\n' +
-  '</Package>'
   ctx.set('Content-Disposition', 'attachment')
-  ctx.body = packageHeader + extractObjectMetadata(ctx.request.body, false, true, false) + packageFooter
+  ctx.body = buildPackage(ctx.request.body)
+}
+
+function buildPackage(metadata) {
+  return packageHeader + extractObjectMetadata(metadata, false, true, false) + packageFooter
 }
 
 export async function getZip(ctx, data) {
