@@ -106,20 +106,30 @@ export async function getMetadata(ctx) {
     }
   } else {
     let query
-    if (type === 'SharingRules') {
-      query = [{ type: 'SharingCriteriaRule' }, { type: 'SharingOwnerRule' }]
-    } else if (type === 'CustomLabels') {
-      query = { type: 'CustomLabel' }
+    
+    if (type === 'Flow') {
+      list = await conn.tooling.sobject('Flow').find({}, 'MasterLabel, VersionNumber')
+      list = list.map(a => {
+        a.type = type
+        a.fullName = `${a.MasterLabel}-${a.VersionNumber}`
+        return a
+      })
     } else {
-      if (ctx.query.key in metadata.folderMetadata) {
-        type = metadata.folderMetadata[ctx.query.key]
+      if (type === 'SharingRules') {
+        query = [{ type: 'SharingCriteriaRule' }, { type: 'SharingOwnerRule' }]
+      } else if (type === 'CustomLabels') {
+        query = { type: 'CustomLabel' }
+      } else {
+        if (ctx.query.key in metadata.folderMetadata) {
+          type = metadata.folderMetadata[ctx.query.key]
+        }
+        query = { type }
+        if (fullName) {
+          query.folder = fullName
+        }
       }
-      query = { type }
-      if (fullName) {
-        query.folder = fullName
-      }
+      list = await conn.metadata.list(query)
     }
-    list = await conn.metadata.list(query)
 
     if(!list) {
       ctx.body = []
