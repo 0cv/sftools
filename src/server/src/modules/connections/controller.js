@@ -107,33 +107,28 @@ export async function getMetadata(ctx) {
   } else {
     let query
     
-    if (type === 'Flow') {
-      list = await conn.tooling.sobject('Flow').find({}, 'MasterLabel, VersionNumber')
-      list = list.map(a => {
-        a.type = type
-        a.fullName = `${a.MasterLabel}-${a.VersionNumber}`
-        return a
-      })
+    if (type === 'SharingRules') {
+      query = [{ type: 'SharingCriteriaRule' }, { type: 'SharingOwnerRule' }]
+    } else if (type === 'CustomLabels') {
+      query = { type: 'CustomLabel' }
     } else {
-      if (type === 'SharingRules') {
-        query = [{ type: 'SharingCriteriaRule' }, { type: 'SharingOwnerRule' }]
-      } else if (type === 'CustomLabels') {
-        query = { type: 'CustomLabel' }
-      } else {
-        if (ctx.query.key in metadata.folderMetadata) {
-          type = metadata.folderMetadata[ctx.query.key]
-        }
-        query = { type }
-        if (fullName) {
-          query.folder = fullName
-        }
+      if (ctx.query.key in metadata.folderMetadata) {
+        type = metadata.folderMetadata[ctx.query.key]
       }
-      list = await conn.metadata.list(query)
+      query = { type }
+      if (fullName) {
+        query.folder = fullName
+      }
     }
+    list = await conn.metadata.list(query)
 
     if(!list) {
       ctx.body = []
       return
+    }
+
+    if (!Array.isArray(list)) {
+      list = [list]
     }
 
     //CURRENT BUG IN SALESFORCE: RULES ARE DUPLICATED, WE DEDUPE THEM...
@@ -142,11 +137,18 @@ export async function getMetadata(ctx) {
       list = list.filter((tmp, index, array) => {
         return index === array.findIndex(item => tmp.id === item.id)
       })
+    } 
+    //CURRENT BUG IN SALESFORCE: Flows FullName are not retrieved correctly so we take the API Name which is 
+    // correct, and append the VersionNumber from the Tooling API.
+    else if(type === 'Flow') {
+      const flowVersionNumbers = await conn.tooling.query('Select Id, VersionNumber From Flow')
+      list = list.map((tmp) => {
+        const flowVersionNumber = flowVersionNumbers.records.find(flow => flow.Id === tmp.id)
+        tmp.fullName = tmp.fullName.split('-')[0] + '-' + flowVersionNumber.VersionNumber
+        return tmp
+      })
     }
 
-    if (!Array.isArray(list)) {
-      list = [list]
-    }
     ctx.body = list
       .filter(meta => {
         return ctx.query.showManagedPackage === 'true' ||
