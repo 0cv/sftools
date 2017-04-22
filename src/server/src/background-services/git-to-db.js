@@ -109,6 +109,9 @@ export async function gitToDb() {
     const connections = await Connection.find({
       _id: {
         $in: connectionIds
+      },
+      privatekey: {
+        $ne: null
       }
     })
 
@@ -124,6 +127,10 @@ export async function gitToDb() {
     console.log('latestCommits ==> ', latestCommits)
     for (let i = projects.length; i--;) {
       let project = projects[i]
+      if(connections.findIndex(connection => connection._id.toString() === project.connection.toString()) === -1 ) {
+        projects.splice(i, 1)
+        continue
+      }
       projectCommits.set(project._id.toString(), project.latestCommit)
       if (project.latestCommit !== latestCommits.get(project.connection.toString())) {
         project.latestCommit = latestCommits.get(project.connection.toString())
