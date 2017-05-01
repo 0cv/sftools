@@ -16,7 +16,7 @@ export async function getHeaderMetadata(ctx, connections) {
           conn._destroy()
           return await res
         } catch(e) {
-          console.error('getHeaderMetadata#error when retrieving metadata', e)
+          console.error('getHeaderMetadata#error when retrieving metadata', connection.folder, e)
           return {metadataObjects: []}
         }
       })

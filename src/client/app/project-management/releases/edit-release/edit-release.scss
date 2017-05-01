@@ -12,3 +12,7 @@ md-card {
 .mat-input-container, .mat-select {
   width: 100%;
 }
+
+/deep/ .cdk-overlay-pane {
+  left: 10px!important;
+}

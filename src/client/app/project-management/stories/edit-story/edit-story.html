@@ -12,6 +12,45 @@
           <input mdInput class="large" placeholder="Shared With (enter email or username of a registered person, then validate with enter)" formControlName="sharedWith">
         </md-input-container>
       </p>
+      <p>
+        <md-select placeholder="Project" formControlName="project">
+          <md-option (click)="form.controls.project.reset()">Select a Project...</md-option>
+          <md-option *ngFor="let opt of projects" [value]="opt._id">
+            {{opt.name}}
+          </md-option>
+        </md-select>
+      </p>
+      <p>
+        <md-select placeholder="Private Key" formControlName="privateKey">
+          <md-option (click)="form.controls.privateKey.reset()">Select a Private Key...</md-option>
+          <md-option *ngFor="let opt of privateKeys" [value]="opt._id">
+            {{opt.name}}
+          </md-option>
+        </md-select>
+      </p>
+      <p>
+        <md-select placeholder="Git Servers" formControlName="gitServer">
+          <md-option (click)="form.controls.gitServer.reset()">Select a Git Server...</md-option>
+          <md-option *ngFor="let opt of gitServers" [value]="opt._id">
+            {{opt.name}}
+          </md-option>
+        </md-select>
+      </p>
+      <p>
+        <md-input-container>
+          <input mdInput class="large" placeholder="Organization Name (let empty if none)" formControlName="organization">
+        </md-input-container>
+      </p>
+      <p>
+        <md-input-container>
+          <input mdInput class="large" placeholder="Repository Name" formControlName="repository">
+        </md-input-container>
+      </p>
+      <p>
+        <md-input-container>
+          <input mdInput class="large" placeholder="Branch Name" formControlName="branch">
+        </md-input-container>
+      </p>
       <button type="submit" md-raised-button color="primary" [disabled]="!form.valid">Save</button>
       <a md-raised-button [routerLink]="['/project-management', 'stories']">Back</a>
     </md-card-content>

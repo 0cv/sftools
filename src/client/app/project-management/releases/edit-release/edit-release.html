@@ -8,10 +8,9 @@
         </md-input-container>
       </p>
       <p>
-        Stories
-        <select formControlName="stories" multiple>
-          <option [value]="story._id" *ngFor="let story of stories">{{story.name}}</option>
-        </select>
+        <md-select multiple="true" formControlName="stories" placeholder="Stories">
+          <md-option [value]="story._id" *ngFor="let story of stories">{{ story.name }}</md-option>
+        </md-select>
       </p>
       <p>
         <md-input-container>

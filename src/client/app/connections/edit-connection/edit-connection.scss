@@ -24,4 +24,10 @@ md-radio-button {
 .mat-select {
   padding-top: 15px;
   padding-bottom: 15px;
+  width: 100%;
+}
+
+/deep/ .mat-select-panel {
+  max-height: 500px!important;
+  height: 500px;
 }

@@ -4,16 +4,46 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { HttpModule } from '@angular/http'
 import { FancytreeComponent } from './fancytree'
 import { LoadingSpinnerComponent } from './loading-spinner'
-import { MaterialModule } from '@angular/material'
+import {
+  MdButtonModule,
+  MdCardModule,
+  MdCheckboxModule,
+  MdCoreModule,
+  MdDialogModule,
+  MdIconModule,
+  MdInputModule,
+  MdProgressBarModule,
+  MdRadioModule,
+  MdSelectModule,
+  MdSnackBarModule,
+  MdTabsModule,
+  MdToolbarModule
+} from '@angular/material'
 import { SubstrPipe } from './substring.pipe'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { UncamelCase } from './uncamel.pipe'
+
+const MATERIAL_MODULES = [
+  MdButtonModule,
+  MdCardModule,
+  MdCheckboxModule,
+  MdCoreModule,
+  MdDialogModule,
+  MdIconModule,
+  MdInputModule,
+  MdProgressBarModule,
+  MdRadioModule,
+  MdSelectModule,
+  MdSnackBarModule,
+  MdTabsModule,
+  MdToolbarModule
+]
 
 @NgModule({
   imports: [
     CommonModule,
     BrowserAnimationsModule,
-    MaterialModule
+    ...MATERIAL_MODULES
   ],
   declarations: [
     FancytreeComponent,
@@ -25,7 +55,7 @@ import { UncamelCase } from './uncamel.pipe'
   exports: [
     BrowserAnimationsModule,
     CommonModule,
-    MaterialModule,
+    ...MATERIAL_MODULES,
     HttpModule,
     FormsModule,
     ReactiveFormsModule,
@@ -35,4 +65,4 @@ import { UncamelCase } from './uncamel.pipe'
     UncamelCase
   ]
 })
-export class SharedModule {}
+export class SharedModule { }

@@ -12,16 +12,22 @@ import { StoreService } from 'core/store.service'
 })
 
 export class StoriesComponent implements OnInit {
+  projects = {}
+  gitServers = {}
+  privateKeys = {}
   stories = []
 
   constructor(
     private router: Router,
     public story: Story,
     public store: StoreService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.getStories()
+    this.loadProjects()
+    this.loadGitServers()
+    this.loadPrivateKeys()
   }
 
   getStories() {
@@ -34,6 +40,30 @@ export class StoriesComponent implements OnInit {
     this.story.deleteById(story._id).subscribe((res) => {
       this.store.delete('story', story._id)
       this.getStories()
+    })
+  }
+
+  loadProjects() {
+    this.store.read('project').subscribe(projects => {
+      for (let project of projects) {
+        this.projects[project._id] = project
+      }
+    })
+  }
+
+  loadGitServers() {
+    this.store.read('gitserver').subscribe(gitServers => {
+      for (let gitServer of gitServers) {
+        this.gitServers[gitServer._id] = gitServer
+      }
+    })
+  }
+
+  loadPrivateKeys() {
+    this.store.read('privatekey').subscribe(privateKeys => {
+      for (let privateKey of privateKeys) {
+        this.privateKeys[privateKey._id] = privateKey
+      }
     })
   }
 }

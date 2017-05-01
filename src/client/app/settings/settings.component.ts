@@ -11,7 +11,7 @@ import { StoreService } from 'core/store.service'
 })
 
 export class SettingsComponent implements OnInit {
-  user: {} = {}
+  user: any = {}
 
   constructor(
     private store: StoreService

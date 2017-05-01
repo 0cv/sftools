@@ -207,6 +207,8 @@ Deleted metadata (from Salesforce) will be displayed (in a red text color) and c
 
 Before trying to deploy on your own server, you will want to experiment on your local machine first. In order to get the application running, you will have to setup a few things first:
 
+- Install globally `npm`, `yarn` and `nodemon`.
+
 - Install dependencies with `yarn install`.
 
 - Copy `/src/server/config/env/production.js` and rename it to `/src/server/config/env/development.js`. Edit each key:

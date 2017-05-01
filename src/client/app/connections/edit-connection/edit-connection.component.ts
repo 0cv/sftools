@@ -15,9 +15,9 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms'
 export class EditConnectionComponent implements OnDestroy, OnInit {
   sub: any
   type: string
-  gitServers: Array < any > = []
+  gitServers: Array<any> = []
   optionComponentTypes = []
-  privateKeys: Array < any > = []
+  privateKeys: Array<any> = []
 
   form = new FormGroup({
     _id: new FormControl(),
@@ -78,7 +78,7 @@ export class EditConnectionComponent implements OnDestroy, OnInit {
     private gitServer: GitServer,
     private privateKey: PrivateKey,
     private store: StoreService
-  ) {}
+  ) { }
 
   ngOnDestroy() {
     this.sub.unsubscribe()
@@ -123,8 +123,8 @@ export class EditConnectionComponent implements OnDestroy, OnInit {
   loadOptionComponentTypes(_id) {
     console.log('loadOptionComponentTypes')
     //if id is not new, we retrieve the components related to this connection.
-    if(_id !== 'new') {
-      this.connection.getDescribeMetadata({source: _id}).subscribe((_optionComponentTypes) => {
+    if (_id !== 'new') {
+      this.connection.getDescribeMetadata({ source: _id }).subscribe((_optionComponentTypes) => {
         console.log('_optionComponentTypes', _optionComponentTypes)
         this.optionComponentTypes = _optionComponentTypes.map(cmp => cmp.key)
       })
@@ -156,6 +156,18 @@ export class EditConnectionComponent implements OnDestroy, OnInit {
         } else {
           this.router.navigate(['/connections'])
         }
+      })
+    }
+  }
+
+  toggle(ischecked) {
+    if (ischecked) {
+      this.form.patchValue({
+        componenttypes: this.optionComponentTypes
+      })
+    } else {
+      this.form.patchValue({
+        componenttypes: []
       })
     }
   }

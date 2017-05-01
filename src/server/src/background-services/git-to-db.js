@@ -127,7 +127,7 @@ export async function gitToDb() {
     console.log('latestCommits ==> ', latestCommits)
     for (let i = projects.length; i--;) {
       let project = projects[i]
-      if(connections.findIndex(connection => connection._id.toString() === project.connection.toString()) === -1 ) {
+      if (connections.findIndex(connection => connection._id.toString() === project.connection.toString()) === -1) {
         projects.splice(i, 1)
         continue
       }
@@ -154,20 +154,20 @@ export async function gitToDb() {
       }
     }
 
-    await Promise.all( projects.map(project => project.save()) )
+    await Promise.all(projects.map(project => project.save()))
 
     //we pull the repositories for all connections under the `topFolder` directory
-    await retrieveMetadataFromGit(connections, topFolder, true)
+    await retrieveMetadataFromGit(connections, topFolder, true, false)
 
     //we describe the metadata of the different connections
     //storing all the top metadata per connection
     const metadataTemp = await getHeaderMetadata(null, connections)
     const mapMetadata = new Map()
-    if(!metadataTemp) {
+    if (!metadataTemp) {
       // Nothing to proceed
       return
     }
-    for(let connectionId of Object.keys(metadataTemp)) {
+    for (let connectionId of Object.keys(metadataTemp)) {
       mapMetadata.set(connectionId, new Map())
       for (let metadata of metadataTemp[connectionId]) {
         mapMetadata.get(connectionId).set(metadata.directoryName, metadata)
@@ -180,7 +180,7 @@ export async function gitToDb() {
       if (projectCommits.get(project._id.toString())) {
         let myConnection = connections.find(conn => conn._id.toString() === project.connection.toString())
 
-        differences = await gitDiff(myConnection, projectCommits.get(project._id.toString()))
+        differences = await gitDiff(myConnection, projectCommits.get(project._id.toString()), topFolder)
 
         // differences: list of files, which have been changed.
         mapGitDiff.set(project._id.toString(), differences || true)
@@ -238,60 +238,7 @@ export async function gitToDb() {
           return (mapGitDiff.get(projectId) === true || mapGitDiff.get(projectId).has(filePath)) && fileName && fileName !== ','
         })
 
-        await Promise.all(fileNames.map(async (fileName) => {
-          let filePath = path.join(folder, fileName) //e.g. objects/Account.object
-          let fullFilePath = path.join(topFolder, connectionId, filePath)
-          let isBinary = await isBinaryFn(folder, fullFilePath)
-          let fileContent = await fs.readFileAsync(fullFilePath, isBinary ? null : 'utf8')
-          if (gitChangesComplexMetadata.has(apiFolder)) { //for complex metadata defined there (such as Profile, Custom Object)
-            //console.info('is complex metadata1', fileContent)
-            //this is an XML, which needs to be parsed. Children elements will be inserted separately.
-            //we are just analysing the first level, which should be enough for all metadata
-            let xml = await parseString(fileContent)
-            fileContent = null
-            let nodes = Object.keys(xml[apiFolder]).filter(node => node !== '$')
-
-            await Promise.all(nodes.map(async (node) => { //e.g. node = fields
-              let _array = xml[apiFolder][node]
-              if (!Array.isArray(_array)) {
-                _array = [_array]
-              }
-              await Promise.all(_array.map(async (subJSONContent) => {
-                let key = subMetadataKey.get(node), subKey
-                if (Array.isArray(key)) {
-                  subKey = '|'
-                  for (let i = 0; i < key.length; i++) {
-                    if (subJSONContent.hasOwnProperty(key[i])) {
-                      subKey += subJSONContent[key[i]] + '-'
-                    }
-                  }
-                  if (subKey.endsWith('-')) {
-                    subKey = subKey.substr(0, subKey.length - 1)
-                  }
-                } else {
-                  subKey = key && subJSONContent[key] || ''
-                  if (subKey) {
-                    subKey = '|' + subKey
-                  }
-                }
-                let tmp = {}
-                tmp[node] = subJSONContent
-                let subXMLContent = builder.create(tmp, {
-                  headless: true
-                })
-
-                await upsertMetadata(mapExistingMetadata, upsertedMetadataPath, project, filePath + '|' + node + subKey, apiFolder, filePath, subXMLContent.end({
-                  pretty: true,
-                  indent: '    ',
-                  offset: 1,
-                  newline: '\n'
-                }))
-              }))
-            }))
-          } else {
-            await upsertMetadata(mapExistingMetadata, upsertedMetadataPath, project, filePath, apiFolder, filePath, fileContent, isBinary)
-          }
-        }))
+        await transformFilesToJS(topFolder, folder, fileNames, apiFolder, connectionId, mapExistingMetadata, upsertedMetadataPath, project, true)
 
         //all remaining metadata, are metadata which are not present anymore in GIT.
         //Therefore, they must be tagged as deleted.
@@ -326,13 +273,82 @@ export async function gitToDb() {
     }
 
     console.log('gitToDb finished')
-  } catch(e) {
+  } catch (e) {
     console.error('Error in gitToDb', e)
   }
 }
 
+export async function transformFilesToJS(rootFolder, folder, fileNames, apiFolder, connectionId, mapExistingMetadata, upsertedMetadataPath, project, insertToDB) {
+  metadataToUpsert = []
+  await Promise.all(fileNames.map(async (fileName) => {
+    let filePath = path.join(folder, fileName) //e.g. objects/Account.object
+    let fullFilePath = path.join(rootFolder, connectionId, filePath)
+    let isBinary = await isBinaryFn(folder, fullFilePath)
+    let fileContent
+    try {
+      fileContent = await fs.readFileAsync(fullFilePath, isBinary ? null : 'utf8')
+    } catch (e) {
+      return
+    }
+    if (gitChangesComplexMetadata.has(apiFolder)) { //for complex metadata defined there (such as Profile, Custom Object)
+      //console.info('is complex metadata1', fileContent)
+      //this is an XML, which needs to be parsed. Children elements will be inserted separately.
+      //we are just analysing the first level, which should be enough for all metadata
+
+      console.log('fileContent1', filePath)
+
+      let xml = await parseString(fileContent)
+      console.log('fileContent2', filePath)
+
+      fileContent = null
+      let nodes = Object.keys(xml[apiFolder]).filter(node => node !== '$')
+
+      await Promise.all(nodes.map(async (node) => { //e.g. node = fields
+        let _array = xml[apiFolder][node]
+        if (!Array.isArray(_array)) {
+          _array = [_array]
+        }
+        await Promise.all(_array.map(async (subJSONContent) => {
+          let key = subMetadataKey.get(node), subKey
+          if (Array.isArray(key)) {
+            subKey = '|'
+            for (let i = 0; i < key.length; i++) {
+              if (subJSONContent.hasOwnProperty(key[i])) {
+                subKey += subJSONContent[key[i]] + '-'
+              }
+            }
+            if (subKey.endsWith('-')) {
+              subKey = subKey.substr(0, subKey.length - 1)
+            }
+          } else {
+            subKey = key && subJSONContent[key] || ''
+            if (subKey) {
+              subKey = '|' + subKey
+            }
+          }
+          let tmp = {}
+          tmp[node] = subJSONContent
+          let subXMLContent = builder.create(tmp, {
+            headless: true
+          })
+
+          await upsertMetadata(mapExistingMetadata, upsertedMetadataPath, project, filePath + '|' + node + subKey, apiFolder, filePath, subXMLContent.end({
+            pretty: true,
+            indent: '    ',
+            offset: 1,
+            newline: '\n'
+          }), false, insertToDB)
+        }))
+      }))
+    } else {
+      await upsertMetadata(mapExistingMetadata, upsertedMetadataPath, project, filePath, apiFolder, filePath, fileContent, isBinary, insertToDB)
+    }
+  }))
+  return metadataToUpsert
+}
+
 //method called from the nested loop for upserting metadata (some are updated, other inserted)
-async function upsertMetadata(mapExistingMetadata, upsertedMetadataPath, project, fullPath, apiFolder, filePathInProject, xmlContent, isBinary) {
+async function upsertMetadata(mapExistingMetadata, upsertedMetadataPath, project, fullPath, apiFolder, filePathInProject, xmlContent, isBinary, insertToDB) {
   let fileName = filePathInProject.substr(filePathInProject.lastIndexOf('/') + 1), metadata = {}
   i++
   let newValueField = isBinary ? 'newValueBin' : 'newValue'
@@ -363,7 +379,7 @@ async function upsertMetadata(mapExistingMetadata, upsertedMetadataPath, project
       mapExistingMetadata.delete(fullPath)
 
     } else {
-      metadata.project = project._id
+      metadata.project = project && project._id
       metadata.filePath = filePathInProject
       metadata.fullPath = fullPath
       metadata.name = fileName
@@ -378,7 +394,7 @@ async function upsertMetadata(mapExistingMetadata, upsertedMetadataPath, project
         }
       })
     }
-    if (i % 5000 === 0) { //bulk upsert of 5k records each.
+    if (insertToDB && i % 5000 === 0) { //bulk upsert of 5k records each.
       try {
         let result = await Metadata.collection.bulkWrite(metadataToUpsert.splice(0), {
           ordered: false
@@ -387,7 +403,7 @@ async function upsertMetadata(mapExistingMetadata, upsertedMetadataPath, project
         result.writeErrors && console.error('metadata upserted write errors...', result.writeErrors)
         console.info(`metadata upserted ${result.nInserted} inserted, ${result.nUpserted} upserted, ${result.nMatched} matched, ${result.nModified} modified, ${result.nRemoved} removed`)
         countUpserted += result.nInserted + result.nUpserted
-      } catch(e) {
+      } catch (e) {
         console.error('upsertMetadata.upsert error', e)
       }
     }
@@ -403,14 +419,14 @@ async function isBinaryFn(folder, fullFilePath) {
   return await isBinaryFile(fullFilePath)
 }
 
-async function gitDiff(connection, latestCommit) {
+export async function gitDiff(connection, latestCommit, folder) {
   try {
-    let pfad = path.join(topFolder, connection._id.toString())
+    let pfad = path.join(folder, connection._id.toString())
     console.info('command git diff...', `cd ${pfad} && git diff --name-only ${latestCommit} HEAD`)
     let files = await execAsync(`cd ${pfad} && git diff --name-only ${latestCommit} HEAD`)
     files = files.split('\n')
-    return new Set(files)
-  } catch(e){
+    return new Set(files.filter(file => file !== ''))
+  } catch (e) {
     console.error('bgBackup.getLatestCommits.gitPull:', e)
   }
 }

@@ -38,7 +38,7 @@ export async function sfdcToGit() {
 
         try {
           await sfConn.query('SELECT Id FROM Account limit 1')
-        } catch(e) {
+        } catch (e) {
           console.error('Fail to make a test query returning (invalid token)', e)
           sfConn._destroy()
           return
@@ -56,11 +56,11 @@ export async function sfdcToGit() {
         }
 
         //Push Metadata to Git
-        await pushMetadataToGit(connection, globalAllGitServers, tmpFilesFolder)
+        await pushMetadataToGit(connection, globalAllGitServers, tmpFilesFolder, true)
       })
     )
     console.log('sfdcToGit finished!')
-  } catch(e) {
+  } catch (e) {
     console.log('ERROR IN startBackup', e)
   }
 }
@@ -80,7 +80,7 @@ function findCurrentGitserver(connection, allGitservers) {
 //topFolder: folder where the metadata are saved temporarily
 //onlyPull: whether or not delete the files once they are retrieved. In most cases, we delete them
 //          so that we only keep the information in .git
-export async function retrieveMetadataFromGit(connections, topFolder, onlyPull) {
+export async function retrieveMetadataFromGit(connections, topFolder, onlyPull, fetch) {
   await rimrafAsync(topFolder)
   await fs.mkdirAsync(topFolder)
 
@@ -97,14 +97,14 @@ export async function retrieveMetadataFromGit(connections, topFolder, onlyPull) 
     users.set(user._id.toString(), user)
   }
 
-  connections = await Promise.join(...connections.map((connection) => pullMetadata(connection, topFolder, onlyPull, users)))
+  connections = await Promise.join(...connections.map((connection) => pullMetadata(connection, topFolder, onlyPull, users, fetch)))
 
   //filter remaining connections
   return connections.filter((conn) => conn)
 }
 
 //this method literally pull metadata from Salesforce. It's called for each Connection
-async function pullMetadata(connection, topFolder, onlyPull, users) {
+async function pullMetadata(connection, topFolder, onlyPull, users, fetch) {
   let gitusername,
     pfad = path.join(topFolder, connection._id.toString()),
     gitServer = findCurrentGitserver(connection, globalAllGitServers)
@@ -125,7 +125,7 @@ async function pullMetadata(connection, topFolder, onlyPull, users) {
     await execAsync(`git init ${pfad}`, {
       maxBuffer: Infinity
     })
-  } catch(e) {
+  } catch (e) {
     console.error('sfdcToGit.retrieveMetadataFromGit.gitInit:', e)
     return
   }
@@ -135,7 +135,7 @@ async function pullMetadata(connection, topFolder, onlyPull, users) {
     await execAsync(`cd ${pfad} && git config --local http.sslverify false`, {
       maxBuffer: Infinity
     })
-  } catch(e) {
+  } catch (e) {
     console.error('sfdcToGit.retrieveMetadataFromGit.config:', e)
     return
   }
@@ -145,22 +145,45 @@ async function pullMetadata(connection, topFolder, onlyPull, users) {
     await execAsync(`cd ${pfad} && git config user.email "${users.get(connection.user.toString()).email}" && git config user.name "${gitusername}"`, {
       maxBuffer: Infinity
     })
-  } catch(e) {
+  } catch (e) {
     console.error('sfdcToGit.retrieveMetadataFromGit.config:', e)
     return
   }
 
-  console.info('git pull', `cd ${pfad} && git pull --depth 1 ${sshURL} ${connection.branch ? connection.branch : 'master'}`)
-  try {
-    await execAsync(`cd ${pfad} && git pull --depth 1 ${sshURL} ${connection.branch ? connection.branch : 'master'}`, {
-      maxBuffer: Infinity
-    })
-  } catch(e) {
-    console.error('sfdcToGit.retrieveMetadataFromGit.gitPull:', e)
-    //we return the connection because this error may occur simply because the folder does not
-    //exist yet. Therefore, the process shall continue.
-    return connection
+  if (fetch) {
+    console.info('git fetch master', `cd ${pfad} && git fetch ${sshURL} master:master --update-head-ok`)
+    try {
+      await execAsync(`cd ${pfad} && git fetch ${sshURL} master:master --update-head-ok`, {
+        maxBuffer: Infinity
+      })
+    } catch (e) {
+      console.error('sfdcToGit.retrieveMetadataFromGit.gitFetch1:', e)
+      return connection
+    }
+
+    console.info('git fetch branch', `cd ${pfad} && git fetch ${sshURL} ${connection.branch}:${connection.branch} --update-head-ok`)
+    try {
+      await execAsync(`cd ${pfad} && git fetch ${sshURL} ${connection.branch}:${connection.branch} --update-head-ok`, {
+        maxBuffer: Infinity
+      })
+    } catch (e) {
+      console.error('sfdcToGit.retrieveMetadataFromGit.gitFetch2:', e)
+      return connection
+    }
+  } else {
+    console.info('git pull', `cd ${pfad} && git pull --depth 1 ${sshURL} ${connection.branch ? connection.branch : 'master'}`)
+    try {
+      await execAsync(`cd ${pfad} && git pull --depth 1 ${sshURL} ${connection.branch ? connection.branch : 'master'}`, {
+        maxBuffer: Infinity
+      })
+    } catch (e) {
+      console.error('sfdcToGit.retrieveMetadataFromGit.gitPull:', e)
+      //we return the connection because this error may occur simply because the folder does not
+      //exist yet. Therefore, the process shall continue.
+      return connection
+    }
   }
+
 
   if (onlyPull) {
     return connection
@@ -170,7 +193,7 @@ async function pullMetadata(connection, topFolder, onlyPull, users) {
     await execAsync(`cd ${pfad} && find . -maxdepth 1 ! -name ".git" ! -name ".*" | xargs rm -rf`, {
       maxBuffer: Infinity
     })
-  } catch(e) {
+  } catch (e) {
     console.error('sfdcToGit.retrieveMetadataFromGit.deleteEverythingButGit:', e)
   }
   return connection
@@ -209,7 +232,7 @@ async function getLatestCommit(ret, connection) {
     console.info('sfdcToGit.getLatestCommits1', connection.folder, hash)
 
     ret.set(connection._id.toString(), hash)
-  } catch(e) {
+  } catch (e) {
     console.info('sfdcToGit.getLatestCommits.gitPull:', e)
   }
 }
@@ -224,19 +247,19 @@ export async function createSSHKey(connections) {
         privatekey: {
           $ne: null
         },
-        componenttypes: {$gt: []}
+        componenttypes: { $gt: [] }
       }))
 
     if (!connections) {
       connections = connectionsTmp
     }
-    if(!Array.isArray(connections)) {
+    if (!Array.isArray(connections)) {
       connections = [connections]
     }
-    if(!Array.isArray(gitservers)) {
+    if (!Array.isArray(gitservers)) {
       gitservers = [gitservers]
     }
-    if(!Array.isArray(keys)) {
+    if (!Array.isArray(keys)) {
       keys = [keys]
     }
     globalAllGitServers = gitservers
@@ -252,7 +275,7 @@ export async function createSSHKey(connections) {
       configFile += 'Host ' + connection._id.toString() + '\n'
       configFile += 'HostName ' +
         (gitServerName === 'GitHub' ? 'github.com' :
-          gitServerName === 'Bitbucket' ? 'bitbucket.org':'') + '\n'
+          gitServerName === 'Bitbucket' ? 'bitbucket.org' : '') + '\n'
       configFile += 'IdentityFile ' + path.join(userDirectory, '.ssh', connection.privatekey.toString()) + '\n'
     }
 
@@ -264,7 +287,7 @@ export async function createSSHKey(connections) {
       await fs.chmodAsync(myPath, '700')
     }))
 
-  } catch(e) {
+  } catch (e) {
     console.log('ERROR IN createSSHKey', e)
     throw e
   }
@@ -273,7 +296,7 @@ export async function createSSHKey(connections) {
 
 
 //responsible for creating the GIT repo (if it doesn't exist) and for pushing the data to the GIT server.
-async function pushMetadataToGit(connection, allGitservers, tmpFilesFolder) {
+export async function pushMetadataToGit(connection, allGitservers, tmpFilesFolder, doUpdate) {
   console.log('process pushMetadataToGit', process.memoryUsage(), connection.folder)
 
   let workingPfad = `"${path.join(tmpFilesFolder, connection._id.toString())}"`,
@@ -338,8 +361,9 @@ async function pushMetadataToGit(connection, allGitservers, tmpFilesFolder) {
     await execAsync(`cd ${workingPfad} && git add -A`, {
       maxBuffer: Infinity
     })
-  } catch(e) {
-    console.log('sfdcToGit.pushMetadataToGit.gitAdd:', e)
+  } catch (e) {
+    console.log('sfdcToGit.pushMetadataToGit.gitAdd:', e.message)
+    return e.message
   }
 
   let commitMessage = connection.commitmessage || 'heroku commit'
@@ -348,38 +372,44 @@ async function pushMetadataToGit(connection, allGitservers, tmpFilesFolder) {
       maxBuffer: Infinity
     })
   } catch (e) {
-    console.log('sfdcToGit.pushMetadataToGit.gitCommit:', e.message)
+    console.log('sfdcToGit.pushMetadataToGit.gitCommit:', e)
+    return 'Nothing has changed??...<br/><br/>' + e.message
   }
 
   try {
-    await execAsync(`cd ${workingPfad} && git push ${sshURL} master ${connection.branch && connection.branch.length ? ':' + connection.branch : ''}`, {
+    await execAsync(`cd ${workingPfad} && git push --all ${sshURL}`, {
       maxBuffer: Infinity
     })
-  } catch(e) {
+  } catch (e) {
     console.log('sfdcToGit.pushMetadataToGit.gitPush:', e)
+    return e.message
   }
 
-  let currentDate = new Date()
-  try {
-    await Connection.update({
-      '_id': connection._id
-    }, {
-      $set: {
-        lastupdate: currentDate.toGMTString(),
-        backupStatus: null
-      }
-    })
-  } catch(e) {
-    console.log('sfdcToGit.pushMetadataToGit:', e)
-    const files = await fs.readdirAsync(workingPfad.replace(/"/g, ''))
-    console.info('files still there:', files)
+  if (doUpdate) {
+    let currentDate = new Date()
+    try {
+      await Connection.update({
+        '_id': connection._id
+      }, {
+          $set: {
+            lastupdate: currentDate.toGMTString(),
+            backupStatus: null
+          }
+        })
+    } catch (e) {
+      console.log('sfdcToGit.pushMetadataToGit:', e)
+      const files = await fs.readdirAsync(workingPfad.replace(/"/g, ''))
+      console.info('files still there:', files)
+    }
+
+    try {
+      await execAsync('rm -rf ' + workingPfad)
+    }
+    catch (e) {
+      console.log('sfdcToGit.pushMetadataToGit.catch:', e)
+    }
   }
-  try {
-    await execAsync('rm -rf ' + workingPfad)
-  }
-  catch(e) {
-    console.log('sfdcToGit.pushMetadataToGit.catch:', e)
-  }
+  return null
 }
 
 //get the metadata from salesforce and extracts the zip on the server drive.
@@ -399,20 +429,20 @@ async function retrieveMetadataFromSalesforce(connection, sfConn, tmpFilesFolder
 
   const packageStream = fs.createWriteStream(fileName)
 
-  try{
+  try {
     sfConn.metadata.retrieve({
       apiVersion: config.apiVersion,
       singlePackage: true,
       unpackaged: jsPackage
     })
-    .stream().pipe(packageStream)
-  } catch(e) {
+      .stream().pipe(packageStream)
+  } catch (e) {
     console.log('Error when retrieving metadata', e)
     return
   }
 
   await new Promise((resolve) => {
-    packageStream.on('close', function() {
+    packageStream.on('close', function () {
       console.log('Zip Saved')
       resolve()
     })

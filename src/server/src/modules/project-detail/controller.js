@@ -20,7 +20,8 @@ export async function getDetails(ctx) {
         sharedWith: ctx.session.passport.user._id
       }, {
         user: ctx.session.passport.user._id
-      }]
+      }],
+      project: project._id
     }).lean())
 
   const headerMetadata = listMetadataTmp && listMetadataTmp[Object.keys(listMetadataTmp)[0]]
@@ -68,7 +69,7 @@ export async function storyMetadata(ctx, data) {
     //handling the new metadata stories
     newMetadataStories
       .filter(tmp => projectIds.indexOf(tmp.project) > -1 && storyIds.indexOf(tmp.story) > -1)
-      .map(function(tmp) {
+      .map(function (tmp) {
         if (!tmp._id) {
           tmp.story = mongoose.Types.ObjectId(tmp.story)
           tmp.metadata = mongoose.Types.ObjectId(tmp.metadata)
@@ -106,7 +107,7 @@ export async function storyMetadata(ctx, data) {
       console.log('saveStorymetadata inserted==>', result.nInserted, result.nModified, result.nUpserted)
       console.timeEnd('saveTime')
       ctx.socket.emit('addRemoveMetadataSave', result)
-    } catch(e) {
+    } catch (e) {
       console.error('error in insert==>', e)
     }
   }
@@ -145,7 +146,7 @@ export async function storyMetadata(ctx, data) {
       console.timeEnd('deleteTime')
 
       ctx.socket.emit('addRemoveMetadataSave', result)
-    } catch(e) {
+    } catch (e) {
       console.error('error in deleted==>', e)
     }
   }
@@ -224,7 +225,7 @@ export async function getMetadatas(ctx, data) {
   }).lean()
   console.log('project', project)
 
-  if(!project._id) {
+  if (!project._id) {
     return
   }
 

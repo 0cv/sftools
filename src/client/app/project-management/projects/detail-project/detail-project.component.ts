@@ -31,7 +31,7 @@ export class DetailProjectComponent implements OnDestroy, OnInit {
   mapStoryMetadatas = new Map()
   newMetadataStories = []
   oldMetadataStories = []
-  project: {}
+  project: any = {}
   projectId: string
   showIgnored = false
   showUnassigned = false
@@ -48,7 +48,7 @@ export class DetailProjectComponent implements OnDestroy, OnInit {
     public dialog: MdDialog,
     private renderer: Renderer,
     public elementRef: ElementRef
-  ) {}
+  ) { }
 
   ngOnDestroy() {
     this.sub.unsubscribe()
@@ -74,7 +74,7 @@ export class DetailProjectComponent implements OnDestroy, OnInit {
     })
 
     this.socket.on('metadatas', (_metadatas) => {
-      if(_metadatas.over) {
+      if (_metadatas.over) {
         console.log('metadatas', metadatas.length)
         this.initialLoadBufferValue += 33.33
         this.drawTree(metadatas)
@@ -88,13 +88,13 @@ export class DetailProjectComponent implements OnDestroy, OnInit {
     })
 
     this.socket.on('storyMetadatas', (storyMetadatas) => {
-      if(storyMetadatas.over) {
+      if (storyMetadatas.over) {
         this.initialLoadBufferValue += 33.33
         this.syncingStatus += 'Story metadatas loaded<br/>'
         this.fancytree.rerender()
-        console.log('storyMetadatas', this.mapStoryMetadatas)
+        //console.log('storyMetadatas', this.mapStoryMetadatas)
       } else {
-        for(let storyMetadata of storyMetadatas) {
+        for (let storyMetadata of storyMetadatas) {
           if (!this.mapStoryMetadatas.has(storyMetadata.metadata)) {
             this.mapStoryMetadatas.set(storyMetadata.metadata, [])
           }
@@ -104,7 +104,7 @@ export class DetailProjectComponent implements OnDestroy, OnInit {
     })
 
     this.socket.on('metadatasPayload', (metadatasPayload) => {
-      if(metadatasPayload.over) {
+      if (metadatasPayload.over) {
         this.initialLoadBufferValue += 33.33
         this.syncingStatus += 'Metadatas payload loaded<br/>'
         this.fancytree.rerender()
@@ -127,7 +127,7 @@ export class DetailProjectComponent implements OnDestroy, OnInit {
         this.describeMetadata = details.describeMetadata
         this.project = details.project
         this.stories = details.stories
-        for(let story of this.stories) {
+        for (let story of this.stories) {
           this.mapStory.set(story._id, story)
         }
         console.log('this.describeMetadata', this.describeMetadata)
@@ -138,11 +138,12 @@ export class DetailProjectComponent implements OnDestroy, OnInit {
   }
 
   addStories() {
-    if(this.isLoading || this.initialLoadBufferValue < 99) {
+    if (this.isLoading || this.initialLoadBufferValue < 99) {
       return
     }
     this.dialogStoriesRef = this.dialog.open(DialogStoriesComponent, {
-      disableClose: false
+      disableClose: false,
+      width: '500px'
     })
     this.dialogStoriesRef.componentInstance.type = 'Add'
     this.dialogStoriesRef.componentInstance.stories = this.stories
@@ -180,7 +181,7 @@ export class DetailProjectComponent implements OnDestroy, OnInit {
             if (storyMetadataIndex > -1) { //for existing storymetadata in the db
               storyMetadata = _storyMetadatas[storyMetadataIndex]
               if (storyMetadata.newValue !== this.mapMetadatasPayload.get(node.key).newValue ||
-                  storyMetadata.isDeleted !== metadataIsDeleted) {
+                storyMetadata.isDeleted !== metadataIsDeleted) {
                 storyMetadata.newValue = this.mapMetadatasPayload.get(node.key).newValue
                 storyMetadata.newValueBin = this.mapMetadatasPayload.get(node.key).newValueBin
                 storyMetadata.isDeleted = metadataIsDeleted
@@ -264,7 +265,7 @@ export class DetailProjectComponent implements OnDestroy, OnInit {
       }
 
       for (let metadata of metadatas) {
-        if(!this.mapMetadatas.has(metadata._id)) {
+        if (!this.mapMetadatas.has(metadata._id)) {
           this.mapMetadatas.set(metadata._id, metadata)
         }
       }
@@ -306,11 +307,11 @@ export class DetailProjectComponent implements OnDestroy, OnInit {
       const type = event.target.dataset.type
       console.log('handleTagClick', metadataId, storyId, type)
 
-      if(type === 'remove-story') {
+      if (type === 'remove-story') {
         _this.removeStory(metadataId, storyId)
         //the user has clicked the "x" to remove a Story Metadata
 
-      } else if(type === 'show-diff') {
+      } else if (type === 'show-diff') {
         //the user has clicked the span item to show the diff
         _this.showDiff(metadataId, storyId)
       }
@@ -318,7 +319,7 @@ export class DetailProjectComponent implements OnDestroy, OnInit {
   }
 
   ignoreMetadatas() {
-    if(this.isLoading || this.initialLoadBufferValue < 99) {
+    if (this.isLoading || this.initialLoadBufferValue < 99) {
       return
     }
     const selectedNodes = this.fancytree.get()
@@ -336,7 +337,7 @@ export class DetailProjectComponent implements OnDestroy, OnInit {
         return node.key
       })
 
-    if(selectedNodeIds.length) {
+    if (selectedNodeIds.length) {
       this.syncingStatus = 'Sending data to the server...'
       this.socket.emit('project.ignoreMetadatas', {
         selectedNodeIds
@@ -348,7 +349,7 @@ export class DetailProjectComponent implements OnDestroy, OnInit {
   }
 
   onShowIgnoredChange() {
-    if(!this.isFetchedIgnoredDone) {
+    if (!this.isFetchedIgnoredDone) {
       this.isFetchedIgnoredDone = true
       this.initialLoadBufferValue = 0
       this.syncingStatus = ''
@@ -356,7 +357,7 @@ export class DetailProjectComponent implements OnDestroy, OnInit {
         projectId: this.projectId,
         showIgnored: this.showIgnored
       })
-    } else if(this.mapMetadatas.size) {
+    } else if (this.mapMetadatas.size) {
       this.drawTree()
     }
   }
@@ -367,7 +368,7 @@ export class DetailProjectComponent implements OnDestroy, OnInit {
   }
 
   removeStories() {
-    if(this.isLoading || this.initialLoadBufferValue < 99) {
+    if (this.isLoading || this.initialLoadBufferValue < 99) {
       return
     }
     console.log('remove stories')
@@ -385,7 +386,7 @@ export class DetailProjectComponent implements OnDestroy, OnInit {
   }
 
   removeStory(metadataId, storyId) {
-    if(this.isLoading || this.initialLoadBufferValue < 99) {
+    if (this.isLoading || this.initialLoadBufferValue < 99) {
       return
     }
     console.log('remove story')
@@ -448,13 +449,16 @@ export class DetailProjectComponent implements OnDestroy, OnInit {
       let ele = args.data.node.tr.getElementsByTagName('td')[1]
       let html = this.tagStartHTML
       for (let storyMetadata of this.mapStoryMetadatas.get(key)) {
+        if(!this.mapStory.has(storyMetadata.story)) {
+          return
+        }
         html += this.storyElement(
           this.mapStory.get(storyMetadata.story).name,
           storyMetadata.metadata,
           storyMetadata.story,
-            !this.mapMetadatasPayload.has(key) ||
-            this.mapMetadatasPayload.get(key).newValue !== storyMetadata.newValue ||
-            (this.mapMetadatas.get(key).status === 'Deleted') !== storyMetadata.isDeleted,
+          !this.mapMetadatasPayload.has(key) ||
+          this.mapMetadatasPayload.get(key).newValue !== storyMetadata.newValue ||
+          (this.mapMetadatas.get(key).status === 'Deleted') !== storyMetadata.isDeleted,
           !this.mapMetadatasPayload.has(key) || !storyMetadata.newValue
         )
 
@@ -468,9 +472,9 @@ export class DetailProjectComponent implements OnDestroy, OnInit {
     if (!undetermined && hasChanged) {
       showDiff = `data-metadata-id="${metadataId}" data-story-id="${storyId}" data-type="show-diff"`
     }
-    return `<li class="${undetermined?'undetermined':hasChanged?'orange':'green'}" ${showDiff}>` +
+    return `<li class="${undetermined ? 'undetermined' : hasChanged ? 'orange' : 'green'}" ${showDiff}>` +
       `<span ${showDiff}>${name}</span>` +
-      (undetermined?'':`<i class="fa fa-times" data-metadata-id="${metadataId}" data-story-id="${storyId}" data-type="remove-story" aria-hidden="true"></i>`) +
+      (undetermined ? '' : `<i class="fa fa-times" data-metadata-id="${metadataId}" data-story-id="${storyId}" data-type="remove-story" aria-hidden="true"></i>`) +
       '</li>'
   }
 

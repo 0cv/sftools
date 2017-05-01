@@ -89,15 +89,14 @@
       </div>
       <div>
         <p>
-          <select multiple="true" placeholder="Choose your components" formControlName="componenttypes" style="height: 500px;">
-            <option *ngFor="let cmp of optionComponentTypes" [value]="cmp">{{cmp}}</option>
-          </select>
-
-          <!--<md-select multiple placeholder="Choose your components" formControlName="componenttypes">
+          <md-checkbox (change)="toggle(mytoggle.checked)" #mytoggle>Toggle Selection</md-checkbox>
+        </p>
+        <p>
+          <md-select multiple placeholder="Choose your components" formControlName="componenttypes">
             <md-option *ngFor="let cmp of optionComponentTypes" [value]="cmp">
               {{cmp}}
             </md-option>
-          </md-select>-->
+          </md-select>
         </p>
       </div>
     </md-card-content>

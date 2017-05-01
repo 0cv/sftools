@@ -8,10 +8,21 @@
 
       <h1>{{story?.name}}</h1>
 
-      <fancytree #fancytree
-        [extensions]="['childcounter', 'glyph', 'table']"
-        (renderTreeColumn)="renderTreeColumn($event)"
-      ></fancytree>
+      <fancytree #fancytree [extensions]="['childcounter', 'glyph', 'table']" (renderTreeColumn)="renderTreeColumn($event)"></fancytree>
+    </div>
+    <div class="git" *ngIf="story?.repository && story?.branch">
+      <md-input-container>
+        <input mdInput placeholder="Commit message..." [(ngModel)]="commitMessage">
+      </md-input-container>
+      <br/>
+      <a md-raised-button (click)="commitToBranch()" [disabled]="isLoading || initialLoadBufferValue < 100 || !commitMessage">
+        {{'Push to ' + (story.organization?(story.organization + '/'): '') + story.repository + ':' + story.branch}}
+      </a>
+      <br/>
+      <br/>
+      <a target="_blank" [href]="'https://www.github.com/' + story.username + '/' + story.repository + '/compare/' + story.branch">
+        Link to the GitHub Branch (if it exists)
+      </a>
     </div>
     <div class="control">
       <md-card *ngIf="syncingStatus">

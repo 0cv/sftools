@@ -18,6 +18,7 @@ export class DetailStoryComponent implements OnDestroy, OnInit {
   @ViewChild('fancytree') fancytree: FancytreeComponent
 
   allMetadatas = []
+  commitMessage
   describeMetadata
   dialogGitDifRef: MdDialogRef<DialogGitDiffComponent>
   initSynced = []
@@ -42,7 +43,7 @@ export class DetailStoryComponent implements OnDestroy, OnInit {
     public dialog: MdDialog,
     private renderer: Renderer,
     public elementRef: ElementRef,
-  ) {}
+  ) { }
 
   ngOnDestroy() {
     this.listenFunc && this.listenFunc()
@@ -69,8 +70,8 @@ export class DetailStoryComponent implements OnDestroy, OnInit {
     })
 
     this.socket.on('metadatas', (_metadatas) => {
-      if(_metadatas.over) {
-        console.log('metadatas', this.allMetadatas.length)
+      if (_metadatas.over) {
+        console.log('metadatas', this.allMetadatas)
         this.initialLoadBufferValue += 50
         this.drawTree(this.allMetadatas)
         this.syncingStatus += 'Latest metadata loaded<br/>'
@@ -82,7 +83,7 @@ export class DetailStoryComponent implements OnDestroy, OnInit {
     })
 
     this.socket.on('storyMetadatas', (storyMetadatas) => {
-      if(storyMetadatas.over) {
+      if (storyMetadatas.over) {
         this.initialLoadBufferValue += 50
         this.syncingStatus += 'Story metadata loaded<br/>'
         this.fancytree.rerender()
@@ -103,10 +104,31 @@ export class DetailStoryComponent implements OnDestroy, OnInit {
       this.syncingStatus = PrettifyStatus(result)
       this.fancytree.rerender()
     })
+
+    this.socket.on('commitToBranch', (result) => {
+      console.log('commitToBranch', result)
+      this.isLoading = false
+      this.syncingStatus = result.msg
+    })
+  }
+
+  // Will push the metadata to the remote server based on the Story Rep / Branch settings
+  commitToBranch() {
+    if (this.isLoading || this.initialLoadBufferValue < 100 || !confirm('Are you sure to commit the metadata to Git?')) {
+      return
+    }
+
+    this.isLoading = true
+    this.syncingStatus = 'Sending data to the server.'
+    this.socket.emit('story.commitToBranch', {
+      metadatas: this.allMetadatas,
+      story: this.story,
+      commitMessage: this.commitMessage
+    })
   }
 
   deleteMetadata() {
-    if(this.isLoading || this.initialLoadBufferValue < 100) {
+    if (this.isLoading || this.initialLoadBufferValue < 100) {
       return
     }
     const selectedNodes = this.fancytree.get()
@@ -150,7 +172,7 @@ export class DetailStoryComponent implements OnDestroy, OnInit {
   }
 
   downloadMetadata() {
-    if(this.isLoading || this.initialLoadBufferValue < 100) {
+    if (this.isLoading || this.initialLoadBufferValue < 100) {
       return
     }
     let storyMetadatas = []
@@ -215,7 +237,7 @@ export class DetailStoryComponent implements OnDestroy, OnInit {
     return hasChanged
   }
 
-  renderTreeColumn(args) {
+  renderTreeColumn(args: any) {
     const metadataId = args.data.node.key
     if (this.mapStoryMetadatas.has(metadataId)) {
       const ele = args.data.node.tr.getElementsByTagName('td')[1]
@@ -255,7 +277,7 @@ export class DetailStoryComponent implements OnDestroy, OnInit {
   }
 
   toggleShowOutdated() {
-    if(!this.showOutdated) {
+    if (!this.showOutdated) {
       this.drawTree(this.allMetadatas)
       return
     }
@@ -266,7 +288,7 @@ export class DetailStoryComponent implements OnDestroy, OnInit {
   }
 
   updateMetadata() {
-    if(this.isLoading || this.initialLoadBufferValue < 100) {
+    if (this.isLoading || this.initialLoadBufferValue < 100) {
       return
     }
     let selectedNodes = this.fancytree.get()
@@ -280,8 +302,8 @@ export class DetailStoryComponent implements OnDestroy, OnInit {
           metadata = this.mapMetadatas.get(node.key)
 
         if (storyMetadata.newValue !== metadata.newValue ||
-            storyMetadata.newValueBin !== metadata.newValueBin ||
-            storyMetadata.isDeleted !== (metadata.status === 'Deleted')) {
+          storyMetadata.newValueBin !== metadata.newValueBin ||
+          storyMetadata.isDeleted !== (metadata.status === 'Deleted')) {
           storyMetadata.newValue = metadata.newValue
           storyMetadata.newValueBin = metadata.newValueBin
           storyMetadata.isDeleted = metadata.status === 'Deleted'
