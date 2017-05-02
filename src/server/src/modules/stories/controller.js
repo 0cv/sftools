@@ -1,4 +1,4 @@
-import { Story } from '../../models'
+import { Story, Storymetadata } from '../../models'
 
 export async function createStory(ctx) {
   delete ctx.request.body._id
@@ -69,6 +69,9 @@ export async function deleteStory(ctx) {
   const story = new Story({_id: ctx.params._id})
 
   await story.remove()
+  await Storymetadata.remove({
+    story: ctx.params._id
+  })
 
   ctx.body = {
     success: true
