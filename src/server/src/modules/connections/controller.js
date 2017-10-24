@@ -106,7 +106,7 @@ export async function getMetadata(ctx) {
     }
   } else {
     let query
-    
+
     if (type === 'SharingRules') {
       query = [{ type: 'SharingCriteriaRule' }, { type: 'SharingOwnerRule' }]
     } else if (type === 'CustomLabels') {
@@ -137,8 +137,8 @@ export async function getMetadata(ctx) {
       list = list.filter((tmp, index, array) => {
         return index === array.findIndex(item => tmp.id === item.id)
       })
-    } 
-    //CURRENT BUG IN SALESFORCE: Flows FullName are not retrieved correctly so we take the API Name which is 
+    }
+    //CURRENT BUG IN SALESFORCE: Flows FullName are not retrieved correctly so we take the API Name which is
     // correct, and append the VersionNumber from the Tooling API.
     else if(type === 'Flow') {
       const flowVersionNumbers = await conn.tooling.query('Select Id, VersionNumber From Flow')
@@ -146,6 +146,12 @@ export async function getMetadata(ctx) {
         const flowVersionNumber = flowVersionNumbers.records.find(flow => flow.Id === tmp.id)
         tmp.fullName = tmp.fullName.split('-')[0] + '-' + flowVersionNumber.VersionNumber
         return tmp
+      })
+    }
+    //ANOTHER BUG IN SALESFORCE: Account and Person Accounts are duplicated...
+    else if(type === 'CustomObject') {
+      list = list.filter((tmp, index, array) => {
+        return index === array.findIndex(item => tmp.fullName === item.fullName)
       })
     }
 
