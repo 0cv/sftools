@@ -287,8 +287,6 @@ export class DeploymentComponent implements OnDestroy, OnInit {
   }
 
   onConnectionChange() {
-    console.log('selectedSource', this.request.selectedSource, this.request.showManagedPackage)
-
     this.fancytree && this.fancytree.reload()
   }
 
@@ -298,12 +296,10 @@ export class DeploymentComponent implements OnDestroy, OnInit {
   }
 
   onStoryChange() {
-    console.log('this.story', this.storyId)
     this.getStories(this.storyId !== null ? [this.storyId]: [])
   }
 
   getStories(storyIds) {
-    console.log('storyIds', storyIds)
     this.storyMetadatas = []
 
     if(storyIds.length) {
@@ -313,6 +309,7 @@ export class DeploymentComponent implements OnDestroy, OnInit {
       })
     } else {
       this.fancytree && this.fancytree.reload()
+      this.isLoading = false
     }
   }
 }
