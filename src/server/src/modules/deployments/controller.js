@@ -70,7 +70,7 @@ export async function deployMetadataToSalesforce(zip, ctx, data) {
     checkOnly: data.checkOnly,
     rollbackOnError: connection.issandbox?data.rollbackOnError:true,
     testLevel: data.testLevel,
-    singlePackage: data.deleteMetadata? true : false
+    singlePackage: data.deleteMetadata || !!data.storyIds.length
   })
 
   if(ctx) {
