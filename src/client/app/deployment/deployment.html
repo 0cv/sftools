@@ -90,8 +90,8 @@
           (request.selectedSource === null && storyId === null && releaseId === null) ||
           (request.selectedTarget === null && !request.deleteMetadata)"
         (click)="deploy()"
-        color="primary">
-        Deploy
+        [color]="request.deleteMetadata?'warn':'primary'">
+        {{request.deleteMetadata?'Delete':'Deploy'}}
       </button>
       <button md-raised-button [disabled]="!isLoading || !deploymentId || canceling" (click)="cancelDeployment()" color="warn">Cancel Deployment</button>
       <button md-raised-button *ngIf="storyId === null && releaseId === null" [disabled]="isLoading || request.selectedSource === null" (click)="getPackage()">Download Package.xml</button>
