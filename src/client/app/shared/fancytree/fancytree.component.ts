@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, EventEmitter, Injectable, Input, 
 
 const jQuery = require('jquery')
 require('jquery-ui/ui/core')
+require('jquery-ui/ui/unique-id')
 require('jquery-ui/ui/widget')
 require('jquery-ui/ui/effects/effect-blind')
 require('imports-loader?jQuery=jquery!jquery.fancytree/dist/jquery.fancytree.js')
