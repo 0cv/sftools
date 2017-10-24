@@ -31,7 +31,7 @@
         </p>
         <p>
           <md-select placeholder="Private Keys" formControlName="privatekey">
-            <md-option (click)="form.controls.privatekey.reset()">Select a Private Key...</md-option>
+            <md-option (click)="form.controls['privatekey'].reset()">Select a Private Key...</md-option>
             <md-option *ngFor="let opt of privateKeys" [value]="opt._id">
               {{opt.name}}
             </md-option>
@@ -39,7 +39,7 @@
         </p>
         <p>
           <md-select placeholder="Git Servers" formControlName="gitserver">
-            <md-option (click)="form.controls.gitserver.reset()">Select a Git Server...</md-option>
+            <md-option (click)="form.controls['gitserver'].reset()">Select a Git Server...</md-option>
             <md-option *ngFor="let opt of gitServers" [value]="opt._id">
               {{opt.name}}
             </md-option>

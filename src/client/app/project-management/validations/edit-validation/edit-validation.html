@@ -6,16 +6,16 @@
         <input mdInput class="large" required placeholder="Name" formControlName="name">
       </md-input-container>
 
-      <md-select placeholder="Choose a Story" required formControlName="story" *ngIf="form.controls.release.value === null">
-        <md-option (click)="form.controls.story.reset(); form.controls.release.enable()">Select a Story...</md-option>
-        <md-option (click)="form.controls.release.disable()" *ngFor="let story of stories" [value]="story._id">
+      <md-select placeholder="Choose a Story" required formControlName="story" *ngIf="form.controls['release'].value === null">
+        <md-option (click)="form.controls['story'].reset(); form.controls['release'].enable()">Select a Story...</md-option>
+        <md-option (click)="form.controls['release'].disable()" *ngFor="let story of stories" [value]="story._id">
           {{story.name}}
         </md-option>
       </md-select>
 
-      <md-select placeholder="Choose a Release" required formControlName="release" *ngIf="form.controls.story.value === null">
-        <md-option (click)="form.controls.release.reset(); form.controls.story.enable()">Select a Release...</md-option>
-        <md-option (click)="form.controls.story.disable()" *ngFor="let release of releases" [value]="release._id">
+      <md-select placeholder="Choose a Release" required formControlName="release" *ngIf="form.controls['story'].value === null">
+        <md-option (click)="form.controls['release'].reset(); form.controls['story'].enable()">Select a Release...</md-option>
+        <md-option (click)="form.controls['story'].disable()" *ngFor="let release of releases" [value]="release._id">
           {{release.name}}
         </md-option>
       </md-select>
