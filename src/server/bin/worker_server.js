@@ -4,7 +4,14 @@ import { config } from '../config'
 import Promise from 'bluebird'
 const exec = require('child_process').exec
 
-var mongooseOptions = { server: { socketOptions: { connectTimeoutMS: 300000 }}};
+var mongooseOptions = {
+  server: {
+    socketOptions: {
+      connectTimeoutMS: 300000
+    }
+  },
+  useMongoClient: true
+}
 
 mongoose.Promise = Promise
 mongoose.connect(config.database, mongooseOptions)

@@ -19,7 +19,9 @@ import etag from 'koa-etag'
 
 global.Promise = Promise
 mongoose.Promise = global.Promise
-mongoose.connect(config.database)
+mongoose.connect(config.database, {
+  useMongoClient: true
+})
 
 require('../config/passport')
 
