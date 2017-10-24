@@ -262,6 +262,7 @@ export class DeploymentComponent implements OnDestroy, OnInit {
     this.deployment.getPackage(metadata).subscribe((pkg) => {
       const blob = new Blob([pkg], { type: 'text/plain;charset=utf-8' })
       saveAs(blob, 'package.xml')
+      this.isLoading = false
     })
   }
 
