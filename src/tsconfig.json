@@ -17,6 +17,7 @@
     "typeRoots": [
       "../node_modules/@types"
     ],
+    "skipLibCheck": true,
     "types": [
       "node",
       "socket.io-client",

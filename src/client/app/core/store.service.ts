@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable'
 
 @Injectable()
 export class StoreService {
-  private store: {} = {}
+  private store: any = {}
 
   constructor(
     private connection: Connection,

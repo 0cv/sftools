@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy } from '@angular/core'
 import { NavigationEnd, Router } from '@angular/router'
 import { StoreService } from 'core/store.service'
 
@@ -10,7 +10,7 @@ import { StoreService } from 'core/store.service'
   templateUrl: './project-management.html'
 })
 
-export class ProjectManagementComponent implements OnInit, OnDestroy {
+export class ProjectManagementComponent implements OnDestroy {
   subRouter: any
   activeLinkIndex = 0
   tabLinks = [
@@ -34,13 +34,7 @@ export class ProjectManagementComponent implements OnInit, OnDestroy {
   ]
   constructor(
     private router: Router
-  ) {}
-
-  ngOnDestroy() {
-    this.subRouter.unsubscribe()
-  }
-
-  ngOnInit() {
+  ) {
     this.subRouter = this.router.events
       .filter(event => event instanceof NavigationEnd )
       .subscribe((event: NavigationEnd) => {
@@ -49,5 +43,9 @@ export class ProjectManagementComponent implements OnInit, OnDestroy {
         }
         this.activeLinkIndex = this.tabLinks.findIndex(tabLink => event.urlAfterRedirects.indexOf(tabLink.searchFor) > -1)
     })
+  }
+
+  ngOnDestroy() {
+    this.subRouter.unsubscribe()
   }
 }
