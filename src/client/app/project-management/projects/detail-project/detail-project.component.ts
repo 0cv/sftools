@@ -4,7 +4,7 @@ import { ProjectDetail } from 'core/lb-services'
 import { FancytreeComponent } from 'shared/fancytree'
 import * as io from 'socket.io-client'
 import { DialogGitDiffComponent, DialogStoriesComponent, GitDiff, MetadataSorting, PrettifyStatus } from '../../utils'
-import { MdDialog, MdDialogRef } from '@angular/material'
+import { MatDialog, MatDialogRef } from '@angular/material'
 
 @Component({
   selector: 'detail-project',
@@ -19,8 +19,8 @@ export class DetailProjectComponent implements OnDestroy, OnInit {
 
   bufferValue = 0
   describeMetadata = {}
-  dialogStoriesRef: MdDialogRef<DialogStoriesComponent>
-  dialogGitDifRef: MdDialogRef<DialogGitDiffComponent>
+  dialogStoriesRef: MatDialogRef<DialogStoriesComponent>
+  dialogGitDifRef: MatDialogRef<DialogGitDiffComponent>
   initialLoadBufferValue = 0
   isFetchedIgnoredDone = false
   isLoading = false
@@ -45,7 +45,7 @@ export class DetailProjectComponent implements OnDestroy, OnInit {
   constructor(
     private route: ActivatedRoute,
     private projectDetail: ProjectDetail,
-    public dialog: MdDialog,
+    public dialog: MatDialog,
     private renderer: Renderer,
     public elementRef: ElementRef
   ) { }

@@ -2,13 +2,13 @@
   width: 30%;
 }
 
-md-card {
+mat-card {
   box-shadow: 0 0 0 0;
   &:hover {
     box-shadow: 0 0 0 0;
   }
 }
 
-.mat-input-container, .mat-select {
+mat-input-container {
   width: 100%;
 }

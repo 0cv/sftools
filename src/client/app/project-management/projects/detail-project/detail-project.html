@@ -1,9 +1,9 @@
 <div>
-  <md-progress-bar mode="buffer" color="primary" [bufferValue]="initialLoadBufferValue" *ngIf="initialLoadBufferValue < 99"></md-progress-bar>
-  <md-progress-bar mode="buffer" color="primary" [bufferValue]="bufferValue" *ngIf="isLoading"></md-progress-bar>
+  <mat-progress-bar mode="buffer" color="primary" [bufferValue]="initialLoadBufferValue" *ngIf="initialLoadBufferValue < 99"></mat-progress-bar>
+  <mat-progress-bar mode="buffer" color="primary" [bufferValue]="bufferValue" *ngIf="isLoading"></mat-progress-bar>
 </div>
-<md-card>
-  <md-card-content class="content">
+<mat-card>
+  <mat-card-content class="content">
     <div class="tree">
 
       <h1>{{project?.name}}</h1>
@@ -14,19 +14,19 @@
       ></fancytree>
     </div>
     <div class="control">
-      <md-card *ngIf="syncingStatus">
+      <mat-card *ngIf="syncingStatus">
         <span [innerHTML]="syncingStatus"></span>
-      </md-card>
-      <md-checkbox [(ngModel)]="showIgnored" (ngModelChange)="onShowIgnoredChange()" [disabled]="isLoading">
+      </mat-card>
+      <mat-checkbox [(ngModel)]="showIgnored" (ngModelChange)="onShowIgnoredChange()" [disabled]="isLoading">
         Show ignored metadata
-      </md-checkbox>
-      <md-checkbox [(ngModel)]="showUnassigned" (ngModelChange)="onShowUnassignedChange()" [disabled]="isLoading">
+      </mat-checkbox>
+      <mat-checkbox [(ngModel)]="showUnassigned" (ngModelChange)="onShowUnassignedChange()" [disabled]="isLoading">
         Show unassigned metadata
-      </md-checkbox>
+      </mat-checkbox>
 
-      <a md-raised-button color="primary" (click)="ignoreMetadatas()" [disabled]="isLoading || initialLoadBufferValue < 40">Ignore selected</a>
-      <a md-raised-button color="warn" (click)="addStories()" [disabled]="isLoading || initialLoadBufferValue < 99">Add Stories to selected metadata...</a>
-      <a md-raised-button color="accent" (click)="removeStories()" [disabled]="isLoading || initialLoadBufferValue < 99">Remove Stories from selected metadata...</a>
+      <a mat-raised-button color="primary" (click)="ignoreMetadatas()" [disabled]="isLoading || initialLoadBufferValue < 40">Ignore selected</a>
+      <a mat-raised-button color="warn" (click)="addStories()" [disabled]="isLoading || initialLoadBufferValue < 99">Add Stories to selected metadata...</a>
+      <a mat-raised-button color="accent" (click)="removeStories()" [disabled]="isLoading || initialLoadBufferValue < 99">Remove Stories from selected metadata...</a>
     </div>
-  </md-card-content>
-</md-card>
+  </mat-card-content>
+</mat-card>

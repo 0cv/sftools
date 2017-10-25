@@ -1,31 +1,31 @@
-<md-card>
+<mat-card>
   <form (ngSubmit)="onSubmit()" [formGroup]="form">
-    <md-card-title>Create a new user</md-card-title>
-    <md-card-content>
+    <mat-card-title>Create a new user</mat-card-title>
+    <mat-card-content>
       <div layout layout-sm="column">
-        <md-input-container>
-          <input mdInput required class="large" autocomplete="new-password" placeholder="Username" autofocus formControlName="username">
-        </md-input-container>
+        <mat-input-container>
+          <input matInput required class="large" autocomplete="new-password" placeholder="Username" autofocus formControlName="username">
+        </mat-input-container>
       </div>
       <div layout layout-sm="column">
-        <md-input-container>
-          <input mdInput required class="large" autocomplete="new-password" type="email" placeholder="Email" formControlName="email">
-        </md-input-container>
+        <mat-input-container>
+          <input matInput required class="large" autocomplete="new-password" type="email" placeholder="Email" formControlName="email">
+        </mat-input-container>
       </div>
       <div layout layout-sm="column">
-        <md-input-container>
-          <input mdInput required class="large" autocomplete="new-password" type="password" placeholder="Password" formControlName="password">
-        </md-input-container>
+        <mat-input-container>
+          <input matInput required class="large" autocomplete="new-password" type="password" placeholder="Password" formControlName="password">
+        </mat-input-container>
       </div>
       <div layout layout-sm="column">
-        <md-input-container>
-          <input mdInput required class="large" autocomplete="new-password" type="password" placeholder="Password Confirmation" formControlName="password_verif" >
-        </md-input-container>
+        <mat-input-container>
+          <input matInput required class="large" autocomplete="new-password" type="password" placeholder="Password Confirmation" formControlName="password_verif" >
+        </mat-input-container>
       </div>
-    </md-card-content>
-    <md-card-actions>
-      <button md-raised-button color="primary" [disabled]="!form.valid || form.value.password_verif != form.value.password">Create User</button>
-      <a md-raised-button [routerLink]="['/login']">Back</a>
-    </md-card-actions>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" [disabled]="!form.valid || form.value.password_verif != form.value.password">Create User</button>
+      <a mat-raised-button [routerLink]="['/login']">Back</a>
+    </mat-card-actions>
   </form>
-</md-card>
+</mat-card>

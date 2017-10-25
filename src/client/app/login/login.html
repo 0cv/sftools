@@ -1,22 +1,22 @@
-<md-card>
+<mat-card>
   <form (ngSubmit)="submit()" [formGroup]="form">
-    <md-card-title>Login</md-card-title>
-    <md-card-content>
+    <mat-card-title>Login</mat-card-title>
+    <mat-card-content>
         <div layout layout-sm="column">
-          <md-input-container>
-            <input mdInput class="large" placeholder="Username" formControlName="username" autofocus required>
-          </md-input-container>
+          <mat-input-container>
+            <input matInput class="large" placeholder="Username" formControlName="username" autofocus required>
+          </mat-input-container>
         </div>
         <div layout layout-sm="column">
-          <md-input-container>
-            <input mdInput class="large" type="password" placeholder="Password" formControlName="password" required>
-          </md-input-container>
+          <mat-input-container>
+            <input matInput class="large" type="password" placeholder="Password" formControlName="password" required>
+          </mat-input-container>
         </div>
-    </md-card-content>
-    <md-card-actions>
-      <button md-raised-button color="primary" [disabled]="!form.valid">Login</button>
-      <a md-raised-button [routerLink]="['/new-user']">Create a New User</a>
-      <a md-raised-button [routerLink]="['/reset-password']">Retrieve your Login/Password</a>
-    </md-card-actions>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" [disabled]="!form.valid">Login</button>
+      <a mat-raised-button [routerLink]="['/new-user']">Create a New User</a>
+      <a mat-raised-button [routerLink]="['/reset-password']">Retrieve your Login/Password</a>
+    </mat-card-actions>
   </form>
-</md-card>
+</mat-card>

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Validation } from 'core/lb-services'
 import { StoreService } from 'core/store.service'
-import { MdDialog, MdDialogRef } from '@angular/material'
+import { MatDialog, MatDialogRef } from '@angular/material'
 import { DialogGitDiffComponent } from '../utils'
 
 @Component({
@@ -14,14 +14,14 @@ import { DialogGitDiffComponent } from '../utils'
 })
 
 export class ValidationsComponent implements OnInit {
-  dialogLogRef: MdDialogRef<DialogGitDiffComponent>
+  dialogLogRef: MatDialogRef<DialogGitDiffComponent>
   validations = []
   connections = {}
   stories = {}
   releases = {}
 
   constructor(
-    public dialog: MdDialog,
+    public dialog: MatDialog,
     public router: Router,
     public store: StoreService,
     public validation: Validation

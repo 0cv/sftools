@@ -5,38 +5,36 @@ import { HttpModule } from '@angular/http'
 import { FancytreeComponent } from './fancytree'
 import { LoadingSpinnerComponent } from './loading-spinner'
 import {
-  MdButtonModule,
-  MdCardModule,
-  MdCheckboxModule,
-  MdCoreModule,
-  MdDialogModule,
-  MdIconModule,
-  MdInputModule,
-  MdProgressBarModule,
-  MdRadioModule,
-  MdSelectModule,
-  MdSnackBarModule,
-  MdTabsModule,
-  MdToolbarModule
+  MatButtonModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatDialogModule,
+  MatIconModule,
+  MatInputModule,
+  MatProgressBarModule,
+  MatRadioModule,
+  MatSelectModule,
+  MatSnackBarModule,
+  MatTabsModule,
+  MatToolbarModule
 } from '@angular/material'
 import { SubstrPipe } from './substring.pipe'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { UncamelCase } from './uncamel.pipe'
 
 const MATERIAL_MODULES = [
-  MdButtonModule,
-  MdCardModule,
-  MdCheckboxModule,
-  MdCoreModule,
-  MdDialogModule,
-  MdIconModule,
-  MdInputModule,
-  MdProgressBarModule,
-  MdRadioModule,
-  MdSelectModule,
-  MdSnackBarModule,
-  MdTabsModule,
-  MdToolbarModule
+  MatButtonModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatDialogModule,
+  MatIconModule,
+  MatInputModule,
+  MatProgressBarModule,
+  MatRadioModule,
+  MatSelectModule,
+  MatSnackBarModule,
+  MatTabsModule,
+  MatToolbarModule
 ]
 
 @NgModule({

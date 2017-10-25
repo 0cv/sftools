@@ -1,5 +1,5 @@
-<nav md-tab-nav-bar>
-  <a md-tab-link
+<nav mat-tab-nav-bar>
+  <a mat-tab-link
       *ngFor="let tabLink of tabLinks; let i = index"
       [routerLink]="tabLink.link"
       [active]="activeLinkIndex === i"

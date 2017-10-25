@@ -3,7 +3,7 @@ import { Component, Injectable } from '@angular/core'
 import { Router } from '@angular/router'
 import { StoreService } from 'core/store.service'
 import { FormGroup, FormControl } from '@angular/forms'
-import { MdSnackBar } from '@angular/material'
+import { MatSnackBar } from '@angular/material'
 
 @Component({
   selector: 'login',
@@ -25,7 +25,7 @@ export class LoginComponent {
     private router: Router,
     private user: User,
     private store: StoreService,
-    private snackBar: MdSnackBar
+    private snackBar: MatSnackBar
   ) {}
 
   submit() {

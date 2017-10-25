@@ -1,61 +1,57 @@
 <div>
-  <md-progress-bar mode="buffer" color="primary" *ngIf="isLoading"></md-progress-bar>
+  <mat-progress-bar mode="buffer" color="primary" *ngIf="isLoading"></mat-progress-bar>
 </div>
-<md-card>
-  <md-card-content class="content">
+<mat-card>
+  <mat-card-content class="content">
     <div>
-      <div *ngIf="releaseId === null && request.selectedSource === null">
-        <md-select placeholder="Stories" [(ngModel)]="storyId" (ngModelChange)="onStoryChange()" #storyIdModel="ngModel">
-          <md-option (click)="storyIdModel.reset()">Select a Story...</md-option>
-          <md-option *ngFor="let story of stories" [value]="story._id">
-            {{story.name}}
-          </md-option>
-        </md-select>
-        <br/>
-        <br/>
-        <br/>
+      <div *ngIf="releaseId === null && request.selectedSource === null && !request.deleteMetadata">
+        <mat-input-container>
+          <mat-select placeholder="Stories" [(ngModel)]="storyId" (ngModelChange)="onStoryChange()" #storyIdModel="ngModel">
+            <mat-option (click)="storyIdModel.reset()">Select a Story...</mat-option>
+            <mat-option *ngFor="let story of stories" [value]="story._id">
+              {{story.name}}
+            </mat-option>
+          </mat-select>
+        </mat-input-container>
       </div>
-      <div *ngIf="storyId === null && request.selectedSource === null">
-        <md-select placeholder="Releases" [(ngModel)]="releaseId" (ngModelChange)="onReleaseChange()" #releaseIdModel="ngModel">
-          <md-option (click)="releaseIdModel.reset()">Select a Release...</md-option>
-          <md-option *ngFor="let release of releases" [value]="release._id">
-            {{release.name}}
-          </md-option>
-        </md-select>
-        <br/>
-        <br/>
-        <br/>
+      <div *ngIf="storyId === null && request.selectedSource === null && !request.deleteMetadata">
+        <mat-input-container>
+          <mat-select placeholder="Releases" [(ngModel)]="releaseId" (ngModelChange)="onReleaseChange()" #releaseIdModel="ngModel">
+            <mat-option (click)="releaseIdModel.reset()">Select a Release...</mat-option>
+            <mat-option *ngFor="let release of releases" [value]="release._id">
+              {{release.name}}
+            </mat-option>
+          </mat-select>
+        </mat-input-container>
       </div>
       <div *ngIf="storyId === null && releaseId === null">
-        <md-select placeholder="Source" [(ngModel)]="request.selectedSource" (ngModelChange)="onConnectionChange()" #selectedSourceModel="ngModel">
-          <md-option (click)="selectedSourceModel.reset()">Select a Source...</md-option>
-          <md-option *ngFor="let connection of connections" [value]="connection._id">
-            {{connection.folder}}
-          </md-option>
-        </md-select>
-        <br/>
-        <br/>
-        <br/>
+        <mat-input-container>
+          <mat-select placeholder="Source" [(ngModel)]="request.selectedSource" (ngModelChange)="onConnectionChange()" #selectedSourceModel="ngModel">
+            <mat-option (click)="selectedSourceModel.reset()">Select a Source...</mat-option>
+            <mat-option *ngFor="let connection of connections" [value]="connection._id">
+              {{connection.folder}}
+            </mat-option>
+          </mat-select>
+        </mat-input-container>
       </div>
       <div *ngIf="!request.deleteMetadata">
-        <md-select placeholder="Target" [(ngModel)]="request.selectedTarget" #selectedTargetModel="ngModel">
-          <md-option (click)="selectedTargetModel.reset()">Select a Target...</md-option>
-          <md-option *ngFor="let connection of connections" [value]="connection._id">
-            {{connection.folder}}
-          </md-option>
-        </md-select>
-        <br/>
-        <br/>
-        <br/>
+        <mat-input-container>
+          <mat-select placeholder="Target" [(ngModel)]="request.selectedTarget" #selectedTargetModel="ngModel">
+            <mat-option (click)="selectedTargetModel.reset()">Select a Target...</mat-option>
+            <mat-option *ngFor="let connection of connections" [value]="connection._id">
+              {{connection.folder}}
+            </mat-option>
+          </mat-select>
+        </mat-input-container>
       </div>
       <div *ngIf="storyId === null && releaseId === null">
-        <md-checkbox [(ngModel)]="request.deleteMetadata">
+        <mat-checkbox [(ngModel)]="request.deleteMetadata">
           Delete Metadata?
-        </md-checkbox>
+        </mat-checkbox>
         <br/>
-        <md-checkbox [(ngModel)]="request.showManagedPackage" (ngModelChange)="onConnectionChange()">
+        <mat-checkbox [(ngModel)]="request.showManagedPackage" (ngModelChange)="onConnectionChange()">
           Show Managed Package?
-        </md-checkbox>
+        </mat-checkbox>
         <br/>
         <br/>
       </div>
@@ -68,23 +64,25 @@
       ></fancytree>
     </div>
     <div>
-      <md-select placeholder="Test Level" [(ngModel)]="request.testLevel">
-        <md-option *ngFor="let opt of optTestLevel" [value]="opt">
-          {{opt | UncamelCase}}
-        </md-option>
-      </md-select>
+      <mat-input-container>
+        <mat-select placeholder="Test Level" [(ngModel)]="request.testLevel">
+          <mat-option *ngFor="let opt of optTestLevel" [value]="opt">
+            {{opt | UncamelCase}}
+          </mat-option>
+        </mat-select>
+      </mat-input-container>
       <br/>
-      <md-checkbox [(ngModel)]="request.checkOnly">
+      <mat-checkbox [(ngModel)]="request.checkOnly">
         Check Only
-      </md-checkbox>
+      </mat-checkbox>
       <br/>
-      <md-checkbox [(ngModel)]="request.rollbackOnError">
+      <mat-checkbox [(ngModel)]="request.rollbackOnError">
         Rollback On Error
-      </md-checkbox>
+      </mat-checkbox>
       <br/>
 
       <button
-        md-raised-button
+        mat-raised-button
         [disabled]="
           isLoading ||
           (request.selectedSource === null && storyId === null && releaseId === null) ||
@@ -93,9 +91,9 @@
         [color]="request.deleteMetadata?'warn':'primary'">
         {{request.deleteMetadata?'Delete':'Deploy'}}
       </button>
-      <button md-raised-button [disabled]="!isLoading || !deploymentId || canceling" (click)="cancelDeployment()" color="warn">Cancel Deployment</button>
-      <button md-raised-button *ngIf="storyId === null && releaseId === null" [disabled]="isLoading || request.selectedSource === null" (click)="getPackage()">Download Package.xml</button>
-      <button md-raised-button *ngIf="storyId === null && releaseId === null" [disabled]="isLoading || request.selectedSource === null" (click)="getZip()">Download ZIP</button>
+      <button mat-raised-button [disabled]="!isLoading || !deploymentId || canceling" (click)="cancelDeployment()" color="warn">Cancel Deployment</button>
+      <button mat-raised-button *ngIf="storyId === null && releaseId === null" [disabled]="isLoading || request.selectedSource === null" (click)="getPackage()">Download Package.xml</button>
+      <button mat-raised-button *ngIf="storyId === null && releaseId === null" [disabled]="isLoading || request.selectedSource === null" (click)="getZip()">Download ZIP</button>
 
       <div class="textareas">
         <div class="horizontal-alignment">
@@ -106,5 +104,5 @@
         <textarea disabled="true" [ngModel]="testFailures"></textarea>
       </div>
     </div>
-  </md-card-content>
-</md-card>
+  </mat-card-content>
+</mat-card>

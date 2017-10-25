@@ -1,19 +1,19 @@
-<md-card>
+<mat-card>
   <form (ngSubmit)="save()" #keyForm="ngForm" [formGroup]="form">
-    <md-card-title>{{type}} Private Key</md-card-title>
-    <md-card-content>
+    <mat-card-title>{{type}} Private Key</mat-card-title>
+    <mat-card-content>
       <p>
-        <md-input-container>
-          <input mdInput class="large" required placeholder="Name" formControlName="name">
-        </md-input-container>
+        <mat-input-container>
+          <input matInput class="large" required placeholder="Name" formControlName="name">
+        </mat-input-container>
       </p>
       <p>
-        <md-input-container>
-        <textarea mdInput cols="70" rows="20" required placeholder="Private Key" formControlName="value"></textarea>
-        </md-input-container>
+        <mat-input-container>
+        <textarea matInput cols="70" rows="20" required placeholder="Private Key" formControlName="value"></textarea>
+        </mat-input-container>
       </p>
-      <button type="submit" md-raised-button color="primary" [disabled]="!form.valid">Save</button>
-      <a md-raised-button [routerLink]="['/private-keys']">Back</a>
-    </md-card-content>
+      <button type="submit" mat-raised-button color="primary" [disabled]="!form.valid">Save</button>
+      <a mat-raised-button [routerLink]="['/private-keys']">Back</a>
+    </mat-card-content>
   </form>
-</md-card>
+</mat-card>

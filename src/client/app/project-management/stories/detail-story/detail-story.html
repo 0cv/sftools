@@ -1,9 +1,9 @@
 <div>
-  <md-progress-bar mode="buffer" color="primary" [bufferValue]="initialLoadBufferValue" *ngIf="initialLoadBufferValue < 99"></md-progress-bar>
-  <md-progress-bar mode="buffer" color="primary" [bufferValue]="bufferValue" *ngIf="isLoading"></md-progress-bar>
+  <mat-progress-bar mode="buffer" color="primary" [bufferValue]="initialLoadBufferValue" *ngIf="initialLoadBufferValue < 99"></mat-progress-bar>
+  <mat-progress-bar mode="buffer" color="primary" [bufferValue]="bufferValue" *ngIf="isLoading"></mat-progress-bar>
 </div>
-<md-card>
-  <md-card-content class="content">
+<mat-card>
+  <mat-card-content class="content">
     <div class="tree">
 
       <h1>{{story?.name}}</h1>
@@ -11,11 +11,11 @@
       <fancytree #fancytree [extensions]="['childcounter', 'glyph', 'table']" (renderTreeColumn)="renderTreeColumn($event)"></fancytree>
     </div>
     <div class="git" *ngIf="story?.repository && story?.branch">
-      <md-input-container>
-        <input mdInput placeholder="Commit message..." [(ngModel)]="commitMessage">
-      </md-input-container>
+      <mat-input-container>
+        <input matInput placeholder="Commit message..." [(ngModel)]="commitMessage">
+      </mat-input-container>
       <br/>
-      <a md-raised-button (click)="commitToBranch()" [disabled]="isLoading || initialLoadBufferValue < 100 || !commitMessage">
+      <a mat-raised-button (click)="commitToBranch()" [disabled]="isLoading || initialLoadBufferValue < 100 || !commitMessage">
         {{'Push to ' + (story.organization?(story.organization + '/'): '') + story.repository + ':' + story.branch}}
       </a>
       <br/>
@@ -25,16 +25,16 @@
       </a>
     </div>
     <div class="control">
-      <md-card *ngIf="syncingStatus">
+      <mat-card *ngIf="syncingStatus">
         <span [innerHTML]="syncingStatus"></span>
-      </md-card>
-      <md-checkbox [(ngModel)]="showOutdated" (ngModelChange)="toggleShowOutdated()" [disabled]="isLoading">
+      </mat-card>
+      <mat-checkbox [(ngModel)]="showOutdated" (ngModelChange)="toggleShowOutdated()" [disabled]="isLoading">
         Show outdated metadata
-      </md-checkbox>
+      </mat-checkbox>
 
-      <a md-raised-button color="primary" (click)="updateMetadata()" [disabled]="isLoading || initialLoadBufferValue < 100">Update selected metadata</a>
-      <a md-raised-button color="warn" (click)="deleteMetadata()" [disabled]="isLoading || initialLoadBufferValue < 100">Delete selected metadata</a>
-      <a md-raised-button (click)="downloadMetadata()" [disabled]="isLoading || initialLoadBufferValue < 100">Download metadata</a>
+      <a mat-raised-button color="primary" (click)="updateMetadata()" [disabled]="isLoading || initialLoadBufferValue < 100">Update selected metadata</a>
+      <a mat-raised-button color="warn" (click)="deleteMetadata()" [disabled]="isLoading || initialLoadBufferValue < 100">Delete selected metadata</a>
+      <a mat-raised-button (click)="downloadMetadata()" [disabled]="isLoading || initialLoadBufferValue < 100">Download metadata</a>
     </div>
-  </md-card-content>
-</md-card>
+  </mat-card-content>
+</mat-card>

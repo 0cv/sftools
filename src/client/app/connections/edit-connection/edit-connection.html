@@ -1,108 +1,86 @@
-<md-card>
+<mat-card>
   <form (ngSubmit)="save()" [formGroup]="form">
-    <md-card-title>{{type}} Connection</md-card-title>
-    <md-card-content>
+    <mat-card-title>{{type}} Connection</mat-card-title>
+    <mat-card-content>
       <div>
-        <p>
-          <md-input-container>
-            <input mdInput class="large" required placeholder="Folder on Git" formControlName="folder" ngControl="folder">
-          </md-input-container>
-        </p>
+        <mat-input-container>
+          <input matInput class="large" required placeholder="Folder on Git" formControlName="folder" ngControl="folder">
+        </mat-input-container>
         <p *ngIf="type === 'New'">
           <label>Environment:</label>
-          <md-radio-group *ngIf="type === 'New'" required name="endpoint" placeholder="Choose your Endpoint" [formControl]="endpoint">
-            <md-radio-button name="endpoint" *ngFor="let opt of endpoints" [value]="opt">
+          <mat-radio-group *ngIf="type === 'New'" required name="endpoint" placeholder="Choose your Endpoint" [formControl]="endpoint">
+            <mat-radio-button name="endpoint" *ngFor="let opt of endpoints" [value]="opt">
               {{opt}}
-            </md-radio-button>
-          </md-radio-group>
+            </mat-radio-button>
+          </mat-radio-group>
         </p>
-        <p>
-          <md-input-container>
-            <input mdInput class="large" placeholder="Commit Message (default to Heroku Commit)" formControlName="commitmessage">
-          </md-input-container>
-        </p>
+        <mat-input-container>
+          <input matInput class="large" placeholder="Commit Message (default to Heroku Commit)" formControlName="commitmessage">
+        </mat-input-container>
         <p *ngIf="type === 'Edit'">
-          <md-checkbox disabled="true" [checked]="form.value.issandbox">Is Sandbox?</md-checkbox>
+          <mat-checkbox disabled="true" [checked]="form.value.issandbox">Is Sandbox?</mat-checkbox>
         </p>
-        <p>
-          <md-input-container>
-            <input mdInput class="large" placeholder="Branch (default: master)" formControlName="branch">
-          </md-input-container>
-        </p>
-        <p>
-          <md-select placeholder="Private Keys" formControlName="privatekey">
-            <md-option (click)="form.controls['privatekey'].reset()">Select a Private Key...</md-option>
-            <md-option *ngFor="let opt of privateKeys" [value]="opt._id">
+        <mat-input-container>
+          <input matInput class="large" placeholder="Branch (default: master)" formControlName="branch">
+        </mat-input-container>
+        <mat-input-container>
+          <mat-select placeholder="Private Keys" formControlName="privatekey">
+            <mat-option (click)="form.controls['privatekey'].reset()">Select a Private Key...</mat-option>
+            <mat-option *ngFor="let opt of privateKeys" [value]="opt._id">
               {{opt.name}}
-            </md-option>
-          </md-select>
-        </p>
-        <p>
-          <md-select placeholder="Git Servers" formControlName="gitserver">
-            <md-option (click)="form.controls['gitserver'].reset()">Select a Git Server...</md-option>
-            <md-option *ngFor="let opt of gitServers" [value]="opt._id">
+            </mat-option>
+          </mat-select>
+        </mat-input-container>
+        <mat-input-container>
+          <mat-select placeholder="Git Servers" formControlName="gitserver">
+            <mat-option (click)="form.controls['gitserver'].reset()">Select a Git Server...</mat-option>
+            <mat-option *ngFor="let opt of gitServers" [value]="opt._id">
               {{opt.name}}
-            </md-option>
-          </md-select>
-        </p>
-        <p>
-          <md-input-container>
-            <input mdInput class="large" placeholder="Company Folder (let empty for personal Git account)" formControlName="companyfolder">
-          </md-input-container>
-        </p>
-        <p>
-          <md-checkbox formControlName="isrunningunittests">Auto-run the Organization Unit Tests</md-checkbox>
-        </p>
+            </mat-option>
+          </mat-select>
+        </mat-input-container>
+        <mat-input-container>
+          <input matInput class="large" placeholder="Company Folder (let empty for personal Git account)" formControlName="companyfolder">
+        </mat-input-container>
+        <mat-checkbox formControlName="isrunningunittests">Auto-run the Organization Unit Tests</mat-checkbox>
         <ng-template [ngIf]="form.value.isrunningunittests">
-          <p>
-            <md-checkbox formControlName="isunittestasync">Async Testing</md-checkbox>
-          </p>
-          <p>
-            <md-select placeholder="Unit Test Frequency" formControlName="unittestfrequencyrun">
-              <md-option *ngFor="let cmp of unitTestFrequencyOptions" [value]="cmp.value">
+          <mat-checkbox formControlName="isunittestasync">Async Testing</mat-checkbox>
+          <mat-input-container>
+            <mat-select placeholder="Unit Test Frequency" formControlName="unittestfrequencyrun">
+              <mat-option *ngFor="let cmp of unitTestFrequencyOptions" [value]="cmp.value">
                 {{cmp.text}}
-              </md-option>
-            </md-select>
-          </p>
-          <p>
-            <md-input-container>
-              <input mdInput class="large" placeholder="Email Unit Tests results at (comma separated)" formControlName="unittestsrecipients">
-            </md-input-container>
-          </p>
-          <p>
-            <md-input-container>
-              <input mdInput class="large" placeholder="Slack Incoming Webhook URL" formControlName="slackwebhook">
-            </md-input-container>
-            <br/><a href="https://my.slack.com/services/new/incoming-webhook/" target="_blank">Slack Webhook Setup</a>
-          </p>
-          <p>
-            <md-input-container>
-              <input mdInput type="number" class="large" placeholder="Testing Start Hour (GMT) - (Let empty for no restriction)" formControlName="unittestsstart">
-            </md-input-container>
-          </p>
-          <p>
-            <md-input-container>
-              <input mdInput type="number" class="large" placeholder="Testing End Hour (GMT) - (Let empty for no restriction)" formControlName="unittestsend">
-            </md-input-container>
-          </p>
+              </mat-option>
+            </mat-select>
+          </mat-input-container>
+          <mat-input-container>
+            <input matInput class="large" placeholder="Email Unit Tests results at (comma separated)" formControlName="unittestsrecipients">
+          </mat-input-container>
+          <mat-input-container>
+            <input matInput class="large" placeholder="Slack Incoming Webhook URL" formControlName="slackwebhook">
+          </mat-input-container>
+          <br/><a href="https://my.slack.com/services/new/incoming-webhook/" target="_blank">Slack Webhook Setup</a>
+          <mat-input-container>
+            <input matInput type="number" class="large" placeholder="Testing Start Hour (GMT) - (Let empty for no restriction)" formControlName="unittestsstart">
+          </mat-input-container>
+          <mat-input-container>
+            <input matInput type="number" class="large" placeholder="Testing End Hour (GMT) - (Let empty for no restriction)" formControlName="unittestsend">
+          </mat-input-container>
         </ng-template>
       </div>
-      <div>
-        <p>
-          <md-checkbox (change)="toggle(mytoggle.checked)" #mytoggle>Toggle Selection</md-checkbox>
-        </p>
-        <p>
-          <md-select multiple placeholder="Choose your components" formControlName="componenttypes">
-            <md-option *ngFor="let cmp of optionComponentTypes" [value]="cmp">
+      <div *ngIf="optionComponentTypes.length">
+        <mat-checkbox (change)="toggle(mytoggle.checked)" #mytoggle>Toggle Selection</mat-checkbox>
+        <mat-input-container>
+          <mat-select multiple placeholder="Choose your components" formControlName="componenttypes">
+            <mat-option *ngFor="let cmp of optionComponentTypes" [value]="cmp">
               {{cmp}}
-            </md-option>
-          </md-select>
-        </p>
+            </mat-option>
+          </mat-select>
+        </mat-input-container>
       </div>
-    </md-card-content>
-    <md-card-actions>
-      <button type="submit" md-raised-button color="primary" [disabled]="!form.valid">Save</button>
-      <a md-raised-button [routerLink]="['/connections/']">Back</a>
-    </md-card-actions>
+    </mat-card-content>
+    <mat-card-actions>
+      <button type="submit" mat-raised-button color="primary" [disabled]="!form.valid">Save</button>
+      <a mat-raised-button [routerLink]="['/connections/']">Back</a>
+    </mat-card-actions>
   </form>
-</md-card>
+</mat-card>

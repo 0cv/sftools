@@ -1,6 +1,7 @@
 import { Component, OnDestroy } from '@angular/core'
 import { NavigationEnd, Router } from '@angular/router'
 import { StoreService } from 'core/store.service'
+import 'rxjs/add/operator/filter'
 
 @Component({
   selector: 'project-management',

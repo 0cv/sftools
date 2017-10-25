@@ -2,7 +2,7 @@ import { User } from 'core/lb-services'
 import { Component, Injectable } from '@angular/core'
 import { Router } from '@angular/router'
 import { FormGroup, FormControl } from '@angular/forms'
-import { MdSnackBar } from '@angular/material'
+import { MatSnackBar } from '@angular/material'
 
 @Component({
   selector: 'new-user',
@@ -25,7 +25,7 @@ export class NewUserComponent {
   constructor(
     private router: Router,
     private user: User,
-    private snackBar: MdSnackBar
+    private snackBar: MatSnackBar
   ) {}
 
   onSubmit() {

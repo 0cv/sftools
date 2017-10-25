@@ -1,19 +1,19 @@
 <header>
-  <md-toolbar color="primary">
+  <mat-toolbar color="primary">
     <div class="title">
       <div style="width:100%">
         Salesforce Tools
       </div>
       <a href="https://www.github.com/Krisa/sftools" target="_blank">
-        <md-icon fontSet="fa" fontIcon="fa-github"></md-icon>
+        <mat-icon fontSet="fa" fontIcon="fa-github"></mat-icon>
       </a>
       <a href="https://www.twitter.com/sf_cv" target="_blank">
-        <md-icon fontSet="fa" fontIcon="fa-twitter"></md-icon>
+        <mat-icon fontSet="fa" fontIcon="fa-twitter"></mat-icon>
       </a>
     </div>
-  </md-toolbar>
-  <nav md-tab-nav-bar *ngIf="isLoggedIn">
-    <a md-tab-link
+  </mat-toolbar>
+  <nav mat-tab-nav-bar *ngIf="isLoggedIn">
+    <a mat-tab-link
         *ngFor="let tabLink of tabLinks; let i = index"
         [routerLink]="tabLink.link"
         [active]="activeLinkIndex === i"
@@ -21,7 +21,7 @@
         (click)="activeLinkIndex = i">
       {{tabLink.label}}
     </a>
-    <a md-tab-link (click)="logout()">Log Out</a>
+    <a mat-tab-link (click)="logout()">Log Out</a>
   </nav>
 </header>
 

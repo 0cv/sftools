@@ -1,31 +1,31 @@
-<md-card>
+<mat-card>
   <form (ngSubmit)="save()" [formGroup]="form">
-    <md-card-title>{{type}} Git Server</md-card-title>
-    <md-card-content>
+    <mat-card-title>{{type}} Git Server</mat-card-title>
+    <mat-card-content>
       <p>
-        <md-input-container>
-          <input mdInput class="large" placeholder="Name" required formControlName="name" >
-        </md-input-container>
+        <mat-input-container>
+          <input matInput class="large" placeholder="Name" required formControlName="name" >
+        </mat-input-container>
       </p>
       <p>
-        <md-radio-group name="more_options" required formControlName="gitserver">
-          <md-radio-button name="more_options"  *ngFor="let opt of options" [value]="opt">
+        <mat-radio-group name="more_options" required formControlName="gitserver">
+          <mat-radio-button name="more_options"  *ngFor="let opt of options" [value]="opt">
             {{opt}}
-          </md-radio-button>
-        </md-radio-group>
+          </mat-radio-button>
+        </mat-radio-group>
       </p>
       <p>
-        <md-input-container>
-          <input mdInput class="large" autocomplete="new-password" placeholder="Git Username" required formControlName="username">
-        </md-input-container>
+        <mat-input-container>
+          <input matInput class="large" autocomplete="new-password" placeholder="Git Username" required formControlName="username">
+        </mat-input-container>
       </p>
       <p>
-        <md-input-container>
-          <input mdInput class="large" autocomplete="new-password" type="password" placeholder="Git Password" required formControlName="password">
-        </md-input-container>
+        <mat-input-container>
+          <input matInput class="large" autocomplete="new-password" type="password" placeholder="Git Password" required formControlName="password">
+        </mat-input-container>
       </p>
-      <button type="submit" md-raised-button color="primary" [disabled]="!form.valid">Save</button>
-      <a md-raised-button [routerLink]="['/git-servers']">Back</a>
-    </md-card-content>
+      <button type="submit" mat-raised-button color="primary" [disabled]="!form.valid">Save</button>
+      <a mat-raised-button [routerLink]="['/git-servers']">Back</a>
+    </mat-card-content>
   </form>
-</md-card>
+</mat-card>

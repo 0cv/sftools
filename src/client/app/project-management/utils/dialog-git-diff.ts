@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { MdDialogRef } from '@angular/material'
+import { MatDialogRef } from '@angular/material'
 
 @Component({
   selector: 'modal-git-diff',
@@ -22,9 +22,9 @@ import { MdDialogRef } from '@angular/material'
     }
   `],
   template: `
-  <md-card-title>{{title}}</md-card-title>
-  <md-card-content class="modal-card-content" [innerHTML]="body"></md-card-content>
-  <button md-button (click)="dialogRef.close('close')">Close</button>
+  <mat-card-title>{{title}}</mat-card-title>
+  <mat-card-content class="modal-card-content" [innerHTML]="body"></mat-card-content>
+  <button mat-button (click)="dialogRef.close('close')">Close</button>
 `
 })
 
@@ -33,7 +33,7 @@ export class DialogGitDiffComponent {
   title
 
   constructor(
-    public dialogRef: MdDialogRef<DialogGitDiffComponent>
+    public dialogRef: MatDialogRef<DialogGitDiffComponent>
   ) {}
 
   buildModal(title, htmlDiff, rawHtml?) {

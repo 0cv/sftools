@@ -1,58 +1,48 @@
-<md-card>
+<mat-card>
   <form (ngSubmit)="save()" [formGroup]="form">
-    <md-card-title>{{type}} Story</md-card-title>
-    <md-card-content>
-      <p>
-        <md-input-container>
-          <input mdInput class="large" required placeholder="Name" formControlName="name">
-        </md-input-container>
-      </p>
-      <p>
-        <md-input-container>
-          <input mdInput class="large" placeholder="Shared With (enter email or username of a registered person, then validate with enter)" formControlName="sharedWith">
-        </md-input-container>
-      </p>
-      <p>
-        <md-select placeholder="Project" formControlName="project">
-          <md-option (click)="form.controls['project'].reset()">Select a Project...</md-option>
-          <md-option *ngFor="let opt of projects" [value]="opt._id">
+    <mat-card-title>{{type}} Story</mat-card-title>
+    <mat-card-content>
+      <mat-input-container>
+        <input matInput class="large" required placeholder="Name" formControlName="name">
+      </mat-input-container>
+      <mat-input-container>
+        <input matInput class="large" placeholder="Shared With (enter email or username of a registered person, then validate with enter)" formControlName="sharedWith">
+      </mat-input-container>
+      <mat-input-container>
+        <mat-select placeholder="Project" formControlName="project">
+          <mat-option (click)="form.controls['project'].reset()">Select a Project...</mat-option>
+          <mat-option *ngFor="let opt of projects" [value]="opt._id">
             {{opt.name}}
-          </md-option>
-        </md-select>
-      </p>
-      <p>
-        <md-select placeholder="Private Key" formControlName="privateKey">
-          <md-option (click)="form.controls['privateKey'].reset()">Select a Private Key...</md-option>
-          <md-option *ngFor="let opt of privateKeys" [value]="opt._id">
+          </mat-option>
+        </mat-select>
+      </mat-input-container>
+      <mat-input-container>
+        <mat-select placeholder="Private Key" formControlName="privateKey">
+          <mat-option (click)="form.controls['privateKey'].reset()">Select a Private Key...</mat-option>
+          <mat-option *ngFor="let opt of privateKeys" [value]="opt._id">
             {{opt.name}}
-          </md-option>
-        </md-select>
-      </p>
-      <p>
-        <md-select placeholder="Git Servers" formControlName="gitServer">
-          <md-option (click)="form.controls['gitServer'].reset()">Select a Git Server...</md-option>
-          <md-option *ngFor="let opt of gitServers" [value]="opt._id">
+          </mat-option>
+        </mat-select>
+      </mat-input-container>
+      <mat-input-container>
+        <mat-select placeholder="Git Servers" formControlName="gitServer">
+          <mat-option (click)="form.controls['gitServer'].reset()">Select a Git Server...</mat-option>
+          <mat-option *ngFor="let opt of gitServers" [value]="opt._id">
             {{opt.name}}
-          </md-option>
-        </md-select>
-      </p>
-      <p>
-        <md-input-container>
-          <input mdInput class="large" placeholder="Organization Name (let empty if none)" formControlName="organization">
-        </md-input-container>
-      </p>
-      <p>
-        <md-input-container>
-          <input mdInput class="large" placeholder="Repository Name" formControlName="repository">
-        </md-input-container>
-      </p>
-      <p>
-        <md-input-container>
-          <input mdInput class="large" placeholder="Branch Name" formControlName="branch">
-        </md-input-container>
-      </p>
-      <button type="submit" md-raised-button color="primary" [disabled]="!form.valid">Save</button>
-      <a md-raised-button [routerLink]="['/project-management', 'stories']">Back</a>
-    </md-card-content>
+          </mat-option>
+        </mat-select>
+      </mat-input-container>
+      <mat-input-container>
+        <input matInput class="large" placeholder="Organization Name (let empty if none)" formControlName="organization">
+      </mat-input-container>
+      <mat-input-container>
+        <input matInput class="large" placeholder="Repository Name" formControlName="repository">
+      </mat-input-container>
+      <mat-input-container>
+        <input matInput class="large" placeholder="Branch Name" formControlName="branch">
+      </mat-input-container>
+      <button type="submit" mat-raised-button color="primary" [disabled]="!form.valid">Save</button>
+      <a mat-raised-button [routerLink]="['/project-management', 'stories']">Back</a>
+    </mat-card-content>
   </form>
-</md-card>
+</mat-card>

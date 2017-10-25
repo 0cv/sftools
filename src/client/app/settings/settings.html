@@ -1,13 +1,13 @@
-<md-card>
-  <md-card-content>
-    <md-input-container>
-      <input mdInput class="large" placeholder="Email" disabled [value]="user.email">
-    </md-input-container>
+<mat-card>
+  <mat-card-content>
+    <mat-input-container>
+      <input matInput class="large" placeholder="Email" disabled [value]="user.email">
+    </mat-input-container>
     <br/>
-    <md-input-container>
-      <input mdInput class="large" placeholder="Username" disabled [value]="user.username">
-    </md-input-container>
+    <mat-input-container>
+      <input matInput class="large" placeholder="Username" disabled [value]="user.username">
+    </mat-input-container>
     <br/>
-    <button md-raised-button color="primary" [routerLink]="['/settings', 'edit']">Edit</button>
-  </md-card-content>
-</md-card>
+    <button mat-raised-button color="primary" [routerLink]="['/settings', 'edit']">Edit</button>
+  </mat-card-content>
+</mat-card>

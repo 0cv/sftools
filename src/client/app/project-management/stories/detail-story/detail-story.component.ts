@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router'
 import { Project, StoryDetail } from 'core/lb-services'
 import { FancytreeComponent } from 'shared/fancytree'
 import * as io from 'socket.io-client'
-import { MdDialog, MdDialogRef } from '@angular/material'
+import { MatDialog, MatDialogRef } from '@angular/material'
 import { DialogGitDiffComponent, GitDiff, MetadataDownload, MetadataSorting, PrettifyStatus } from '../../utils'
 
 @Component({
@@ -20,7 +20,7 @@ export class DetailStoryComponent implements OnDestroy, OnInit {
   allMetadatas = []
   commitMessage
   describeMetadata
-  dialogGitDifRef: MdDialogRef<DialogGitDiffComponent>
+  dialogGitDifRef: MatDialogRef<DialogGitDiffComponent>
   initSynced = []
   initialLoadBufferValue = 0
   isFailed = false
@@ -40,7 +40,7 @@ export class DetailStoryComponent implements OnDestroy, OnInit {
   constructor(
     private route: ActivatedRoute,
     private storyDetail: StoryDetail,
-    public dialog: MdDialog,
+    public dialog: MatDialog,
     private renderer: Renderer,
     public elementRef: ElementRef,
   ) { }

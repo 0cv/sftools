@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { NavigationEnd, Router } from '@angular/router'
 import { User, LoadingSpinnerService, StoreService } from 'core'
-
+import 'rxjs/add/operator/filter'
 /*
  * App Component
  * Top Level Component
@@ -51,7 +51,23 @@ export class AppComponent implements OnDestroy, OnInit {
     private user: User,
     private store: StoreService,
     private loadingSpinnerService: LoadingSpinnerService
-  ) {}
+  ) {
+    this.subRouter = this.router.events
+      .filter(event => event instanceof NavigationEnd )
+      .subscribe((event: NavigationEnd) => {
+        //we find the active tab
+        this.activeLinkIndex = this.tabLinks.findIndex(tabLink => event.urlAfterRedirects.indexOf(tabLink.searchFor) > -1)
+
+        //check whether the user is logged in
+        if( event.urlAfterRedirects === '/login' ||
+            event.urlAfterRedirects === '/reset-password' ||
+            event.urlAfterRedirects === '/new-user') {
+          this.isLoggedIn = false
+        } else {
+          this.isLoggedIn = true
+        }
+    })
+  }
 
 
   ngOnDestroy() {
@@ -67,22 +83,6 @@ export class AppComponent implements OnDestroy, OnInit {
         this.router.navigate(['/connections'])
       }
     })
-
-    this.subRouter = this.router.events
-      .filter(event => event instanceof NavigationEnd )
-      .subscribe((event: NavigationEnd) => {
-        //we find the active tab
-        this.activeLinkIndex = this.tabLinks.findIndex(tabLink => event.urlAfterRedirects.indexOf(tabLink.searchFor) > -1)
-
-        //check whether the user is logged in
-        if( event.urlAfterRedirects === '/login' ||
-            event.urlAfterRedirects === '/reset-password' ||
-            event.urlAfterRedirects === '/new-user') {
-          this.isLoggedIn = false
-        } else {
-          this.isLoggedIn = true
-        }
-    });
 
     this.loadingSpinnerService.spinnerStateAnnounced$.subscribe(
       isShown => {

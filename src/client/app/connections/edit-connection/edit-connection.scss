@@ -2,8 +2,8 @@
   width: 90%
 }
 
-md-card {
-  md-card-content {
+mat-card {
+  mat-card-content {
     width: 100%;
     display: flex;
     &>div {
@@ -12,22 +12,11 @@ md-card {
   }
 }
 
-md-radio-button {
+mat-radio-button {
   display: flex;
   padding-left: 20px;
 }
 
 .mat-input-container {
   width: calc(100% - 30px);
-}
-
-.mat-select {
-  padding-top: 15px;
-  padding-bottom: 15px;
-  width: 100%;
-}
-
-/deep/ .mat-select-panel {
-  max-height: 500px!important;
-  height: 500px;
 }

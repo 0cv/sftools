@@ -12,7 +12,7 @@ table {
   }
 }
 
-md-card-content.content {
+mat-card-content.content {
   display: flex;
   &>div {
     width: 100%;
@@ -51,7 +51,7 @@ button {
   }
 }
 
-.mat-select {
+.mat-input-container {
   width: calc(100% - 30px);
 }
 
