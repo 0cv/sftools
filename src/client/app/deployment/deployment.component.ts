@@ -141,8 +141,12 @@ export class DeploymentComponent implements OnDestroy, OnInit {
         this.status += res.status + '\n'
 
         this.deploymentResult = ''
-        this.deploymentResult += `Tests: ${res.numberTestErrors} errors from a total of ${res.numberTestsTotal}\n`
-        this.deploymentResult += `Components: ${res.numberComponentErrors} errors from a total of ${res.numberComponentsTotal}\n`
+        if(res.numberTestErrors) {
+          this.deploymentResult += `Tests: ${res.numberTestErrors} errors from a total of ${res.numberTestsTotal}\n`
+        }
+        if(res.numberComponentErrors) {
+          this.deploymentResult += `Components: ${res.numberComponentErrors} errors from a total of ${res.numberComponentsTotal}\n`
+        }
 
         this.testFailures = ''
         if(res.details && res.details.runTestResult && res.details.runTestResult.failures) {

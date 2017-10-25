@@ -58,6 +58,16 @@ export async function deploy(ctx, data) {
     })
   } catch(e) {
     console.log('error deploy ==>', e)
+    ctx.socket.emit('deployment', {
+      message: {
+        state: e.message
+      }
+    })
+    ctx.socket.emit('deployment', {
+      deploymentResult: {
+        status: 'Failed'
+      }
+    })
   }
 }
 
