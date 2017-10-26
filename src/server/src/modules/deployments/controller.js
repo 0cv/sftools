@@ -195,7 +195,11 @@ async function getMetadataFromSalesforce(ctx, data) {
   sfConn.metadata.pollTimeout = 60 * 1000 * 1000 // 1 hour
   sfConn.metadata.pollInterval = 10 * 1000 // 10 seconds
 
-  const retrieve = sfConn.metadata.retrieve({ unpackaged: pkg })
+  const retrieve = sfConn.metadata.retrieve({
+    singlePackage: true,
+    apiVersion: config.apiVersion,
+    unpackaged: pkg
+  })
 
   ctx.socket.emit('deployment', {
     message: {
