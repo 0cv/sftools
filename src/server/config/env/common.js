@@ -5,5 +5,5 @@
 
 export var common = {
   port: process.env.PORT || 4201,
-  apiVersion: '41.0'
+  apiVersion: '49.0'
 }
