@@ -3555,9 +3555,9 @@ jquery.fancytree@^2.22.0:
   version "2.24.0"
   resolved "https://registry.yarnpkg.com/jquery.fancytree/-/jquery.fancytree-2.24.0.tgz#60442a65648515d3e652197693efc0646af57629"
 
-jquery@^2.2.4:
-  version "2.2.4"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-2.2.4.tgz#2c89d6889b5eac522a7eea32c14521559c6cbf02"
+jquery@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.5.0.tgz#9980b97d9e4194611c36530e7dc46a58d7340fc9"
 
 js-base64@^2.1.5, js-base64@^2.1.8, js-base64@^2.1.9:
   version "2.3.2"
