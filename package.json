@@ -48,7 +48,7 @@
     "isbinaryfile": "^3.0.2",
     "jsforce": "Krisa/jsforce",
     "jsonwebtoken": "^8.1.0",
-    "jszip": "^3.1.4",
+    "jszip": "^3.7.0",
     "koa": "^2.3.0",
     "koa-bodyparser": "^4.2.0",
     "koa-conditional-get": "^2.0.0",
