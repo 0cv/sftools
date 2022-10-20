@@ -61,7 +61,7 @@
     "koa-socket": "^4.4.0",
     "koa-static": "^4.0.1",
     "koa-views": "^6.1.1",
-    "mongoose": "^4.12.4",
+    "mongoose": "^4.13.21",
     "mongoose-beautiful-unique-validation": "^7.0.0",
     "needle": "^1.6.0",
     "needle-retries": "^1.0.0",
